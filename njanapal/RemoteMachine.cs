@@ -14,10 +14,16 @@ namespace njanapal
         //set HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\AllowRemoteRPC to 1
 
         public Log Log { get; set; }
+
+        public string NumberOfLogicalProcessors { get; set; }
+        public string Caption { get; set; }
+        public string DNSHostName { get; set; }
+
         public RemoteMachine(Log log)
         {
             this.Log = log;
         }
+
         public List<RemoteMachineUser> LoggedUers { get; set; } = new List<RemoteMachineUser>();
 
         public List<(string User, string Message, List<RemoteMachineUser> RemoteMachines)> GetLoggedInUsersByUserName(List<string> machines = null)
@@ -128,15 +134,16 @@ namespace njanapal
             }
             catch (ManagementException err)
             {
-                message = $"ManagementException. Details: {err.ToString()}";
+                message = $"ManagementException. \r\nDetails: {err.ToString()}";
             }
             catch (System.UnauthorizedAccessException unauthorizedErr)
             {
-                message = $"Doesn't have permissions to access the machine, Details : {unauthorizedErr.ToString()}";
+                message = $"Doesn't have permissions to access the machine, \r\nDetails : {unauthorizedErr.ToString()}";
             }
             catch (Exception ex)
             {
-                message = $"Exception Details: {ex.ToString()}";
+                //message = $"Exception Details: {ex.ToString()}";
+                message = $"The RPC server is unavailable. \r\nDetails: {ex.ToString()}";
             }
 
             return (message, users, usersDetails);
@@ -214,19 +221,124 @@ namespace njanapal
 
 
         }
+
+        public (string, string, string, string, string, string) GetOSFriendlyName(string remoteComputerNodeName)
+        {
+            string Caption = string.Empty;
+            string Version = string.Empty;
+            string OSArchitecture = string.Empty;
+            string LastBootUpTime = string.Empty;
+            string Organization = string.Empty;
+            string NumberOfUsers = string.Empty;
+
+            ConnectionOptions connection = new ConnectionOptions();
+            ManagementScope scope = new ManagementScope("\\\\" + remoteComputerNodeName + "\\root\\CIMV2", connection);
+            scope.Connect();
+            ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+            foreach (ManagementObject os in searcher.Get())
+            {
+                Caption = os["Caption"].ToString();
+                Version = os["Version"].ToString();
+                OSArchitecture = os["OSArchitecture"].ToString();
+                LastBootUpTime = os["LastBootUpTime"].ToString();
+                Organization = os["Organization"].ToString();
+                NumberOfUsers = os["NumberOfUsers"].ToString();
+                break;
+            }
+            return (Caption, Version, OSArchitecture, LastBootUpTime, Organization, NumberOfUsers);
+        }
+
+        public ComputerSystem GetComputerSystemInfo(string remoteComputerNodeName)
+        {
+            ComputerSystem _computerSystem = new ComputerSystem();
+
+            ConnectionOptions connection = new ConnectionOptions();
+            ManagementScope scope = new ManagementScope("\\\\" + remoteComputerNodeName + "\\root\\CIMV2", connection);
+            scope.Connect();
+            ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_ComputerSystem");
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+            foreach (ManagementObject os in searcher.Get())
+            {
+                _computerSystem.PrimaryOwnerName = os["PrimaryOwnerName"].ToString();
+                _computerSystem.TotalPhysicalMemory = $"{(int)Math.Round(Convert.ToDouble(os["TotalPhysicalMemory"].ToString()) / (1024 * 1024 * 1024))} GB";
+                _computerSystem.NumberOfLogicalProcessors = os["NumberOfLogicalProcessors"].ToString();
+                _computerSystem.NumberOfProcessors = os["NumberOfProcessors"].ToString();
+                _computerSystem.Caption = os["Caption"].ToString();
+                _computerSystem.DNSHostName = os["DNSHostName"].ToString();
+
+
+                _computerSystem.Domain = os["Domain"].ToString();
+                _computerSystem.Model = os["Model"].ToString();
+                _computerSystem.Name = os["Name"].ToString();
+                //_computerSystem.DNSHostName = os["DNSHostName"].ToString();
+
+
+                break;
+            }
+
+            return _computerSystem;
+        }
+
+        public DiskDrive GetDiskDriveInfo(string remoteComputerNodeName)
+        {
+            DiskDrive _diskDrive = new DiskDrive();
+
+            ConnectionOptions connection = new ConnectionOptions();
+            ManagementScope scope = new ManagementScope("\\\\" + remoteComputerNodeName + "\\root\\CIMV2", connection);
+            scope.Connect();
+            ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_DiskDrive ");
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+            foreach (ManagementObject os in searcher.Get())
+            {
+                _diskDrive.Size = $"{(int)Math.Round(Convert.ToDouble(os["Size"].ToString()) / (1024 * 1024 * 1024))} GB";
+                _diskDrive.Partitions = Convert.ToInt32(os["Partitions"].ToString());
+
+                break;
+            }
+
+            return _diskDrive;
+        }
+
     }
+
 
 
     public class RemoteMachineUser
     {
         public string RemoteMachine { get; set; }
-        public string Message { get; set; }
+        public string Model { get; set; }
+        public string TotalPhysicalMemory { get; set; }
+        public string HardDiskSize { get; set; }
+        public string NumberOfLogicalProcessors { get; set; }
+        public string NumberOfProcessors { get; set; }
+        public int HardDiskPartitions { get; set; }
+
         public string UserName { get; set; }
         public string SessionName { get; set; }
         public string Id { get; set; }
         public string State { get; set; }
         public string IdleTime { get; set; }
         public string LogonTime { get; set; }
+
+        public string Caption { get; set; }
+        public string Version { get; set; }
+        public string OSArchitecture { get; set; }
+        public string LastBootUpTime { get; set; }
+        public string Organization { get; set; }
+        public string NumberOfUsers { get; set; }
+
+        public string PrimaryOwnerName { get; set; }
+        public string DNSHostName { get; set; }
+        //public string CaptionTemp { get; set; }
+        public string PrimaryOwnerContact { get; set; }
+        public string Domain { get; set; }
+        public string Name { get; set; }
+        public string Message { get; set; }
+
     }
 
 
@@ -248,12 +360,29 @@ namespace njanapal
             IdleTime = line.Substring(columnsString.IndexOf("IDLE TIME"), columnsString.IndexOf("LOGON TIME") - columnsString.IndexOf("IDLE TIME") - 1);
             LogonTime = line.Substring(columnsString.IndexOf("LOGON TIME"), line.Length - columnsString.IndexOf("LOGON TIME"));
 
+            LogonTime = GetDateString(LogonTime);
+
             UserName = UserName.Trim();
             SessionName = SessionName.Trim();
             Id = Id.Trim();
             State = State.Trim().ToUpper().Equals("DISC") ? "Disconnected" : State.Trim();
             IdleTime = IdleTime.Trim();
             LogonTime = LogonTime.Trim();
+        }
+
+        public string GetDateString(string datetime)
+        {
+            string result = datetime;
+            try
+            {
+                result = Convert.ToDateTime(datetime).ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            catch
+            {
+                result = datetime;
+            }
+
+            return result;
         }
     }
 
@@ -269,7 +398,7 @@ namespace njanapal
             {
                 _status = value;
                 LogMessages.AppendLine(_status);
-                Console.WriteLine($"[{DateTime.Now }] {_status}");
+                Console.WriteLine($"[{DateTime.Now}] {_status}");
             }
         }
 
@@ -304,4 +433,73 @@ namespace njanapal
 
     }
 
+    public class ComputerSystem
+    {
+        public string PrimaryOwnerName { get; set; }
+        public string TotalPhysicalMemory { get; set; }
+        public string NumberOfLogicalProcessors { get; set; }
+        public string NumberOfProcessors { get; set; }
+        public string DNSHostName { get; set; }
+        public string Caption { get; set; }
+        public string PrimaryOwnerContact { get; set; }
+        public string Domain { get; set; }
+        public string Model { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class DiskDrive
+    {
+        public string Availability { get; set; }
+        public string BytesPerSector { get; set; }
+        public string Capabilities { get; set; }
+        public string CapabilityDescriptions { get; set; }
+        public string Caption { get; set; }
+        public string CompressionMethod { get; set; }
+        public string ConfigManagerErrorCode { get; set; }
+        public Boolean ConfigManagerUserConfig { get; set; }
+        public string CreationClassName { get; set; }
+        public string DefaultBlockSize { get; set; }
+        public string Description { get; set; }
+        public string DeviceID { get; set; }
+        public Boolean ErrorCleared { get; set; }
+        public string ErrorDescription { get; set; }
+        public string ErrorMethodology { get; set; }
+        public string FirmwareRevision { get; set; }
+        public string Index { get; set; }
+        public DateTime InstallDate { get; set; }
+        public string InterfaceType { get; set; }
+        public string LastErrorCode { get; set; }
+        public string Manufacturer { get; set; }
+        public string MaxBlockSize { get; set; }
+        public string MaxMediaSize { get; set; }
+        public Boolean MediaLoaded { get; set; }
+        public string MediaType { get; set; }
+        public string MinBlockSize { get; set; }
+        public string Model { get; set; }
+        public string Name { get; set; }
+        public Boolean NeedsCleaning { get; set; }
+        public string NumberOfMediaSupported { get; set; }
+        public int Partitions { get; set; }
+        public string PNPDeviceID { get; set; }
+        public string PowerManagementCapabilities { get; set; }
+        public Boolean PowerManagementSupported { get; set; }
+        public string SCSIBus { get; set; }
+        public string SCSILogicalUnit { get; set; }
+        public string SCSIPort { get; set; }
+        public string SCSITargetId { get; set; }
+        public string SectorsPerTrack { get; set; }
+        public string SerialNumber { get; set; }
+        public string Signature { get; set; }
+        public String Size { get; set; }
+        public string Status { get; set; }
+        public string StatusInfo { get; set; }
+        public string SystemCreationClassName { get; set; }
+        public string SystemName { get; set; }
+        public string TotalCylinders { get; set; }
+        public string TotalHeads { get; set; }
+        public string TotalSectors { get; set; }
+        public string TotalTracks { get; set; }
+        public string TracksPerCylinder { get; set; }
+
+    }
 }
