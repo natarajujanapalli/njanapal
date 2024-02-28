@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using njanapal;
@@ -13,11 +14,36 @@ namespace Test01
     {
         public static void Main()
         {
-            foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_ComputerSystem").Get())
+
+            //RegEdit rg = new RegEdit();
+            //rg.GetRegistryKey("", "");
+
+            bool pingable = false;
+            Ping pinger = null;
+
+            try
             {
-                Console.WriteLine("Number Of Physical Processors: {0} ", item["NumberOfProcessors"]);
+                pinger = new Ping();
+                PingReply reply = pinger.Send("37INTSQL-WS2019");
+                pingable = reply.Status == IPStatus.Success;
             }
-            Console.ReadLine();
+            catch (PingException ex)
+            {
+                // Discard PingExceptions and return false;
+            }
+            finally
+            {
+                if (pinger != null)
+                {
+                    pinger.Dispose();
+                }
+            }
+
+            //foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_ComputerSystem").Get())
+            //{
+            //    Console.WriteLine("Number Of Physical Processors: {0} ", item["NumberOfProcessors"]);
+            //}
+            //Console.ReadLine();
 
 
 

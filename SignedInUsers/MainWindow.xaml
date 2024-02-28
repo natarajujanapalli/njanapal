@@ -15,14 +15,14 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <StatusBar DockPanel.Dock="Bottom" Height="22" BorderBrush="Bisque" BorderThickness="1">
-            <StatusBarItem Content="Status:" Padding="0" Margin="5, 0, 0, 0" />
-            <Grid  Margin="5, 0, 0, 0" >
-                <StatusBarItem Name="sbiStatus" Grid.Row="0" Content="{Binding Status}" Padding="0" Margin="0,-1,0,0"/>
+        <StatusBar DockPanel.Dock="Bottom" Height="40" BorderBrush="Bisque" BorderThickness="1"  FontSize="16" MouseDoubleClick="StatusBar_MouseDoubleClick" >
+            <StatusBarItem Content="Status:" Margin="5, -2, 0, 0" />
+            <Grid  Margin="5, -2, 0, 0" >
+                <StatusBarItem Name="sbiStatus" Grid.Row="0" Content="{Binding Status}"/>
             </Grid>
         </StatusBar>
 
-        <StackPanel DockPanel.Dock="Bottom" Height="30" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15" IsEnabled="{Binding IsEnable}">
+        <StackPanel DockPanel.Dock="Bottom" Height="30" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,25" IsEnabled="{Binding IsEnable}">
             <Button Width="200" Style="{DynamicResource RoundedButton}" TabIndex="16" Content="Go" Command="{Binding GoCommand}" />
             <Button Width="200" Style="{DynamicResource RoundedButton}" TabIndex="16" Content="Go All" Command="{Binding GoAllCommand}" Margin="30,0,0,0"  />
             <Button Width="200" Style="{DynamicResource RoundedButton}" TabIndex="16" Content="Export CSV" Command="{Binding ExportExcelCommand}" Margin="30,0,0,0"  />
@@ -124,7 +124,7 @@
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Text="{Binding NumberOfLogicalProcessors}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+                                    <TextBox Text="{Binding NumberOfLogicalProcessors}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
                                              TextWrapping="NoWrap" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -137,7 +137,7 @@
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Text="{Binding TotalPhysicalMemory}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+                                    <TextBox Text="{Binding TotalPhysicalMemory}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
                                              TextWrapping="NoWrap" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -150,7 +150,7 @@
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Text="{Binding HardDiskSize}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+                                    <TextBox Text="{Binding HardDiskSize}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
                                              TextWrapping="NoWrap" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

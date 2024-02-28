@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="cmd.cs" />
     <Compile Include="PasswordAssist\User.cs" />
+    <Compile Include="RegEdit.cs" />
     <Compile Include="RemoteMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

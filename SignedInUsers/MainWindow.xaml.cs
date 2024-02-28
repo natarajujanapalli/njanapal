@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace SignedInUsers
 {
@@ -36,6 +37,19 @@ namespace SignedInUsers
         private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             _viewmodel.Go();
+        }
+
+        private void StatusBar_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            string fileName = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Log");
+            if (Directory.Exists(fileName) == false)
+                Directory.CreateDirectory(fileName);
+
+            fileName = System.IO.Path.Combine(fileName, $"Log_{DateTime.Now.ToString("yyyyMMddHHmmss")}.log");
+
+            File.WriteAllText(fileName, _viewmodel.Statuses.ToString());
+
+            System.Diagnostics.Process.Start(fileName);
         }
     }
 }

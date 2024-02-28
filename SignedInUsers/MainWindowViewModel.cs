@@ -181,18 +181,25 @@ namespace SignedInUsers
 
         }
 
+        public StringBuilder Statuses = new StringBuilder();
+
         public async void GoAll()
         {
+            Stopwatch timer = new Stopwatch();
+
             this.IsEnable = false;
 
             int i = 0;
             try
             {
+                Statuses.Clear();
+                timer.Start();
+
                 this.UserDetails = new ObservableCollection<RemoteMachineUser>();
 
                 foreach (string machine in this.Machines)
                 {
-                    this.Status = $"Processing {++i}/{this.Machines.Count} - '{machine}'";
+                    this.Status = $"Processing : {++i}/{this.Machines.Count} - '{machine}'";
                     //Process(machine);
                     var result = await Task.Run(() => Process(machine));
 
@@ -203,7 +210,16 @@ namespace SignedInUsers
                     }
                 }
 
-                this.Status = $"Completed processing all machines.";
+                timer.Stop();
+                TimeSpan timeTaken = timer.Elapsed;
+                string hrs = timeTaken.Hours.ToString().PadLeft(2, '0');
+                string mins = timeTaken.Minutes.ToString().PadLeft(2, '0');
+                string secs = timeTaken.Seconds.ToString().PadLeft(2, '0');
+                string millisecs = timeTaken.Milliseconds.ToString().PadLeft(3, '0');
+
+                this.Status = $"Time Taken: {hrs} : {mins} : {secs} : {millisecs} to process all machines.";
+
+                Statuses.AppendLine(this.Status);
             }
             catch (Exception ex)
             {
@@ -213,16 +229,20 @@ namespace SignedInUsers
 
             this.IsEnable = true;
         }
+       
         public async void Go()
         {
             if (string.IsNullOrWhiteSpace(this.SelectedMachine) || IsEnable == false)
                 return;
 
+            Stopwatch timer = new Stopwatch();
             this.IsEnable = false;
 
             try
             {
-                this.Status = $"Started processing '{SelectedMachine}'";
+                timer.Start();
+
+                this.Status = $"Processing : '{SelectedMachine}'";
                 var temp = UserDetails.ToList();
                 temp.RemoveAll(r => r.RemoteMachine.Equals(SelectedMachine));
 
@@ -236,7 +256,16 @@ namespace SignedInUsers
                     foreach (var r in result)
                         this.UserDetails.Add(r);
                 }
-                this.Status = $"Completed processing '{SelectedMachine}'";
+
+                timer.Stop();
+                TimeSpan timeTaken = timer.Elapsed;
+                string hrs = timeTaken.Hours.ToString().PadLeft(2, '0');
+                string mins = timeTaken.Minutes.ToString().PadLeft(2, '0');
+                string secs = timeTaken.Seconds.ToString().PadLeft(2, '0');
+                string millisecs = timeTaken.Milliseconds.ToString().PadLeft(3, '0');
+
+                this.Status = $"Time Taken: {hrs} : {mins} : {secs} : {millisecs} to process: '{SelectedMachine}'.";
+                Statuses.AppendLine(this.Status);
             }
             catch (Exception ex)
             {
@@ -261,21 +290,19 @@ namespace SignedInUsers
             ComputerSystem _computerSystem = null;
             DiskDrive _diskDrive = null;
 
+            if (remote.PingHost(machine) == false)
+            {
+                result.Add(new RemoteMachineUser { RemoteMachine = machine, Message = $"No such host is known. Host : '{machine}'." });
+                return result;
+            }
+            
+
             try
             {
                 (caption, version, oSArchitecture, lastBootUpTime, organization, numberOfUsers) = remote.GetOSFriendlyName(machine);
-
                 _computerSystem = remote.GetComputerSystemInfo(machine);
-
                 _diskDrive = remote.GetDiskDriveInfo(machine);
-            }
-            catch
-            {
 
-            }
-
-            try
-            {
                 var (message, users, usersDetails) = remote.GetLoggedInUsers(machine);
 
                 if (users == null || users.Count == 0)
