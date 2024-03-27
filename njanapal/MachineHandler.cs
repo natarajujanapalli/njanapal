@@ -203,7 +203,10 @@ namespace njanapal
                 Caption = os["Caption"].ToString();
                 Version = os["Version"].ToString();
                 OSArchitecture = os["OSArchitecture"].ToString();
+
                 LastBootUpTime = os["LastBootUpTime"].ToString();
+                LastBootUpTime = $"{LastBootUpTime.Substring(0, 4)}-{LastBootUpTime.Substring(4, 2)}-{LastBootUpTime.Substring(6, 2)} {LastBootUpTime.Substring(8, 2)}:{LastBootUpTime.Substring(10, 2)}:{LastBootUpTime.Substring(12, 2)}";
+
                 Organization = os["Organization"].ToString();
                 NumberOfUsers = os["NumberOfUsers"].ToString();
                 break;

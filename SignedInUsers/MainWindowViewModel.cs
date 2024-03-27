@@ -213,16 +213,15 @@ namespace SignedInUsers
         public void Load()
         {
             this.Machines = new ObservableCollection<string>();
+            this.VirtualMachines = new ObservableCollection<Machine>();
+            this.Users = new ObservableCollection<User>();
 
             try
             {
                 FilePaths = GetFilePaths();
                 RemoteVirtualMachines = handler.GetRemoteMachineNames(this.FilePath);
 
-                //this.UserDetails = new ObservableCollection<RemoteMachineUser>();
-                //var machines = File.ReadLines(this.FilePath).Where(r => !string.IsNullOrWhiteSpace(r) && !r.Trim().StartsWith("--")).Distinct().OrderBy(r => r).ToList();
-
-                foreach (var vm in RemoteVirtualMachines)
+                foreach (var vm in RemoteVirtualMachines.OrderBy(r => r.MachineName))
                 {
                     if (!string.IsNullOrWhiteSpace(vm.MachineName.ToUpper().Trim()) && !this.Machines.Contains(vm.MachineName.ToUpper().Trim()))
                         this.Machines.Add(vm.MachineName.ToUpper().Trim());
@@ -304,10 +303,15 @@ namespace SignedInUsers
                 timer.Start();
 
                 this.Status = $"Processing : '{SelectedMachine}'";
-                var temp = VirtualMachines.ToList();
-                temp.RemoveAll(r => r.MachineName.Equals(SelectedMachine));
 
+                var temp = this.VirtualMachines.ToList();
+                temp.RemoveAll(r => r.MachineName.Equals(SelectedMachine));
                 this.VirtualMachines = new ObservableCollection<Machine>(temp);
+
+                var tempU = this.Users.ToList();
+                tempU.RemoveAll(r => r.MachineName.Equals(SelectedMachine));
+                this.Users = new ObservableCollection<User>(tempU);
+
 
                 //Process(SelectedMachine);
                 var result = await Task.Run(() => Process(SelectedMachine));
