@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Data;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace SignedInUsers
 {
@@ -69,6 +70,14 @@ namespace SignedInUsers
             }
         }
 
+        private ObservableCollection<string> _filePaths;
+        public ObservableCollection<string> FilePaths
+        {
+            get { return _filePaths; }
+            set { _filePaths = value; RaisePropertyChanged("FilePaths"); }
+        }
+
+
         private ObservableCollection<string> _machines;
         public ObservableCollection<string> Machines
         {
@@ -84,19 +93,44 @@ namespace SignedInUsers
         }
 
 
-        private ObservableCollection<RemoteMachineUser> _userDetails;
-        public ObservableCollection<RemoteMachineUser> UserDetails
+        //private ObservableCollection<RemoteMachineUser> _userDetails;
+        //public ObservableCollection<RemoteMachineUser> UserDetails
+        //{
+        //    get { return _userDetails; }
+        //    set { _userDetails = value; RaisePropertyChanged("UserDetails"); }
+        //}
+
+
+        private ObservableCollection<Machine> _remoteVirtualMachines;
+        public ObservableCollection<Machine> VirtualMachines
         {
-            get { return _userDetails; }
-            set { _userDetails = value; RaisePropertyChanged("UserDetails"); }
+            get { return _remoteVirtualMachines; }
+            set { _remoteVirtualMachines = value; RaisePropertyChanged("VirtualMachines"); }
         }
 
-        private RemoteMachineUser _selectedUserDetails;
-        public RemoteMachineUser SelectedUserDetails
+        private RemoteMachineUser _selectedRemoteVirtualMachine;
+        public RemoteMachineUser SelectedRemoteVirtualMachine
         {
-            get { return _selectedUserDetails; }
-            set { _selectedUserDetails = value; RaisePropertyChanged("SelectedUserDetails"); }
+            get { return _selectedRemoteVirtualMachine; }
+            set { _selectedRemoteVirtualMachine = value; RaisePropertyChanged("SelectedRemoteVirtualMachine"); }
         }
+
+        private ObservableCollection<User> _users;
+        public ObservableCollection<User> Users
+        {
+            get { return _users; }
+            set { _users = value; RaisePropertyChanged("Users"); }
+        }
+
+        private User _selectUser;
+        public User SelectedUser
+        {
+            get { return _selectUser; }
+            set { _selectUser = value; RaisePropertyChanged("SelectedUser"); }
+        }
+
+
+        public ObservableCollection<Machine> RemoteVirtualMachines { get; set; }
 
 
         public RelayCommand BrowseCommand { get; set; }
@@ -118,7 +152,7 @@ namespace SignedInUsers
 
         Log log = null;
         RemoteMachine remote = null;
-
+        MachineHandler handler = null;
 
         public MainWindowViewModel()
         {
@@ -133,11 +167,29 @@ namespace SignedInUsers
             SignOffCommand = new RelayCommand(SignOff);
             ExportExcelCommand = new RelayCommand(ExportExcel);
 
-            FilePath = $"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RemoteMachines.txt")}";
+            //FilePath = $"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RemoteMachines.txt")}";
 
             log = new Log();
-            UserDetails = new ObservableCollection<RemoteMachineUser>();
+            //UserDetails = new ObservableCollection<RemoteMachineUser>();
             remote = new RemoteMachine(log);
+            handler = new MachineHandler();
+
+            VirtualMachines = new ObservableCollection<Machine>();
+            Users = new ObservableCollection<User>();
+
+            FilePaths = GetFilePaths();
+        }
+
+        private ObservableCollection<string> GetFilePaths()
+        {
+            ObservableCollection<string> files = new ObservableCollection<string>();
+
+            foreach(var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.json"))
+            {
+                files.Add(file);
+            }
+
+            return files;
         }
 
         public void Browse()
@@ -160,18 +212,20 @@ namespace SignedInUsers
 
         public void Load()
         {
-            if (this.Machines == null)
-                this.Machines = new ObservableCollection<string>();
+            this.Machines = new ObservableCollection<string>();
 
             try
             {
-                this.UserDetails = new ObservableCollection<RemoteMachineUser>();
-                var machines = File.ReadLines(this.FilePath).Where(r => !string.IsNullOrWhiteSpace(r) && !r.Trim().StartsWith("--")).Distinct().OrderBy(r => r).ToList();
+                FilePaths = GetFilePaths();
+                RemoteVirtualMachines = handler.GetRemoteMachineNames(this.FilePath);
 
-                foreach (var vm in machines)
+                //this.UserDetails = new ObservableCollection<RemoteMachineUser>();
+                //var machines = File.ReadLines(this.FilePath).Where(r => !string.IsNullOrWhiteSpace(r) && !r.Trim().StartsWith("--")).Distinct().OrderBy(r => r).ToList();
+
+                foreach (var vm in RemoteVirtualMachines)
                 {
-                    if (!string.IsNullOrWhiteSpace(vm.ToUpper().Trim()) && !this.Machines.Contains(vm.ToUpper().Trim()))
-                        this.Machines.Add(vm.ToUpper().Trim());
+                    if (!string.IsNullOrWhiteSpace(vm.MachineName.ToUpper().Trim()) && !this.Machines.Contains(vm.MachineName.ToUpper().Trim()))
+                        this.Machines.Add(vm.MachineName.ToUpper().Trim());
                 }
             }
             catch (Exception ex)
@@ -192,10 +246,13 @@ namespace SignedInUsers
             int i = 0;
             try
             {
+
                 Statuses.Clear();
                 timer.Start();
 
-                this.UserDetails = new ObservableCollection<RemoteMachineUser>();
+                //this.UserDetails = new ObservableCollection<RemoteMachineUser>();
+                VirtualMachines = new ObservableCollection<Machine>();
+                Users = new ObservableCollection<User>();
 
                 foreach (string machine in this.Machines)
                 {
@@ -203,12 +260,16 @@ namespace SignedInUsers
                     //Process(machine);
                     var result = await Task.Run(() => Process(machine));
 
-                    if (result != null && result.Count() > 0)
+                    if (result != null)
                     {
-                        foreach (var r in result)
-                            this.UserDetails.Add(r);
+                        VirtualMachines.Add(result);
+                        
+                        foreach(var u in result.Users)
+                            Users.Add(u);
                     }
+
                 }
+
 
                 timer.Stop();
                 TimeSpan timeTaken = timer.Elapsed;
@@ -243,18 +304,20 @@ namespace SignedInUsers
                 timer.Start();
 
                 this.Status = $"Processing : '{SelectedMachine}'";
-                var temp = UserDetails.ToList();
-                temp.RemoveAll(r => r.RemoteMachine.Equals(SelectedMachine));
+                var temp = VirtualMachines.ToList();
+                temp.RemoveAll(r => r.MachineName.Equals(SelectedMachine));
 
-                this.UserDetails = new ObservableCollection<RemoteMachineUser>(temp);
+                this.VirtualMachines = new ObservableCollection<Machine>(temp);
 
                 //Process(SelectedMachine);
                 var result = await Task.Run(() => Process(SelectedMachine));
 
-                if (result != null && result.Count() > 0)
+                if (result != null)
                 {
-                    foreach (var r in result)
-                        this.UserDetails.Add(r);
+                    VirtualMachines.Add(result);
+
+                    foreach (var u in result.Users)
+                        Users.Add(u);
                 }
 
                 timer.Stop();
@@ -275,7 +338,7 @@ namespace SignedInUsers
             this.IsEnable = true;
         }
 
-        public ObservableCollection<RemoteMachineUser> Process(string machine)
+        public Machine Process(string machine)
         {
             if (string.IsNullOrWhiteSpace(machine))
                 return null;
@@ -289,27 +352,151 @@ namespace SignedInUsers
             string numberOfUsers = string.Empty;
             ComputerSystem _computerSystem = null;
             DiskDrive _diskDrive = null;
+            LogicalDisk diskSpace = null;
+            //List<string> exceptions = new List<string>();
+            StringBuilder exceptions = new StringBuilder();
 
-            if (remote.PingHost(machine) == false)
+
+            var RemoteVirtualMachine = RemoteVirtualMachines.Where(r => r.MachineName.ToUpper().Trim().Equals(machine.ToUpper().Trim())).FirstOrDefault();
+            RemoteVirtualMachine.Users = new ObservableCollection<User>();
+
+
+            if (handler.PingHost(machine) == false)
             {
-                result.Add(new RemoteMachineUser { RemoteMachine = machine, Message = $"No such host is known. Host : '{machine}'." });
-                return result;
+                RemoteVirtualMachine.Status = "Powered Off";
+                RemoteVirtualMachine.Message = $"No such host is known. Host : '{machine}'. There might a network problem or Powered Off";
+
+                return RemoteVirtualMachine;
             }
-            
+            else
+            {
+                RemoteVirtualMachine.Status = "Running";
+            }
+
 
             try
             {
-                (caption, version, oSArchitecture, lastBootUpTime, organization, numberOfUsers) = remote.GetOSFriendlyName(machine);
-                _computerSystem = remote.GetComputerSystemInfo(machine);
-                _diskDrive = remote.GetDiskDriveInfo(machine);
-
                 var (message, users, usersDetails) = remote.GetLoggedInUsers(machine);
+
+                if (users != null || users.Count > 0)
+                {
+                    foreach (var user in users)
+                    {
+                        User vmUser = new User();
+
+                        var userDetails = usersDetails?.Where(r => r.UserName.ToLower().Equals(user.ToLower())).FirstOrDefault();
+                        if (userDetails == null)
+                        {
+                            vmUser.MachineName = machine;
+                            vmUser.UserName = user;
+                            vmUser.SessionName = string.Empty;
+                            vmUser.Id = string.Empty;
+                            vmUser.State = string.Empty;
+                            vmUser.IdleTime = string.Empty;
+                            vmUser.LogonTime = string.Empty;
+                        }
+                        else
+                        {
+                            vmUser.MachineName = machine;
+                            vmUser.UserName = userDetails.UserName;
+                            vmUser.SessionName = userDetails.SessionName;
+                            vmUser.Id = userDetails.Id;
+                            vmUser.State = userDetails.State;
+                            vmUser.IdleTime = userDetails.IdleTime;
+                            vmUser.LogonTime = userDetails.LogonTime;
+                        }
+
+                        RemoteVirtualMachine.Users.Add(vmUser);
+
+                    }
+                }
+
+
+                try
+                {
+                    (caption, version, oSArchitecture, lastBootUpTime, organization, numberOfUsers) = handler.GetOSFriendlyName(machine);
+
+                    RemoteVirtualMachine.Caption = caption;
+                    RemoteVirtualMachine.Version = version;
+                    RemoteVirtualMachine.OSArchitecture = oSArchitecture;
+                    RemoteVirtualMachine.LastBootUpTime = lastBootUpTime;
+                    RemoteVirtualMachine.Organization = organization;
+                    RemoteVirtualMachine.NumberOfUsers = numberOfUsers;
+                }
+                catch (Exception ex)
+                {
+                    RemoteVirtualMachine.Message = ex.Message;
+                    if (exceptions.ToString().Contains(ex.Message) == false)
+                        exceptions.AppendLine(ex.Message);
+                }
+
+                try
+                {
+                    _computerSystem = handler.GetComputerSystemInfo(machine);
+
+                    if (_computerSystem != null)
+                    {
+                        RemoteVirtualMachine.HostName = _computerSystem.DNSHostName;
+                        RemoteVirtualMachine.Domain = _computerSystem.Domain;
+                        RemoteVirtualMachine.Model = _computerSystem.Model;
+                        RemoteVirtualMachine.Name = _computerSystem.Name;
+                        RemoteVirtualMachine.NumberOfLogicalProcessors = _computerSystem.NumberOfLogicalProcessors;
+                        RemoteVirtualMachine.NumberOfProcessors = _computerSystem.NumberOfProcessors;
+                        RemoteVirtualMachine.TotalPhysicalMemory = _computerSystem.TotalPhysicalMemory;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    RemoteVirtualMachine.Message = ex.Message;
+
+                    if (exceptions.ToString().Contains(ex.Message) == false)
+                        exceptions.AppendLine(ex.Message);
+                }
+
+                try
+                {
+                    _diskDrive = handler.GetDiskDriveInfo(machine);
+
+                    if (_diskDrive != null)
+                    {
+                        RemoteVirtualMachine.HardDiskPartitions = _diskDrive.Partitions.ToString();
+                        RemoteVirtualMachine.HardDiskSize = _diskDrive.Size;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    RemoteVirtualMachine.Message = ex.Message;
+
+                    if (exceptions.ToString().Contains(ex.Message) == false)
+                        exceptions.AppendLine(ex.Message);
+                }
+
+                try
+                {
+                    diskSpace = handler.GetRemoteDiskSpace(machine);
+
+                    if (diskSpace != null)
+                    {
+                        RemoteVirtualMachine.DiskSpaceSize = diskSpace.Size;
+                        RemoteVirtualMachine.DiskFreeSpace = diskSpace.FreeSpace;
+                        RemoteVirtualMachine.DiskFreeSpacePercentage = diskSpace.FreeSpacePercentage;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    RemoteVirtualMachine.Message = ex.Message;
+
+                    if (exceptions.ToString().Contains(ex.Message) == false)
+                        exceptions.AppendLine(ex.Message);
+                }
+
 
                 if (users == null || users.Count == 0)
                 {
                     RemoteMachineUser rmu = new RemoteMachineUser();
                     rmu.RemoteMachine = machine;
-                    rmu.Message = message;
+                    rmu.Status = "Running";
+                    rmu.Message = exceptions.ToString().TrimEnd('\n').TrimEnd('\r').TrimEnd('\n').TrimEnd('\r') + " " + message;
                     rmu.Caption = caption;
                     rmu.Version = version;
                     rmu.OSArchitecture = oSArchitecture;
@@ -328,7 +515,7 @@ namespace SignedInUsers
                     if (_computerSystem != null)
                     {
                         //rmu.CaptionTemp = _computerSystem.Caption;
-                        rmu.DNSHostName = _computerSystem.DNSHostName;
+                        rmu.HostName = _computerSystem.DNSHostName;
                         rmu.Domain = _computerSystem.Domain;
                         rmu.Model = _computerSystem.Model;
                         rmu.Name = _computerSystem.Name;
@@ -344,6 +531,13 @@ namespace SignedInUsers
                         rmu.HardDiskSize = _diskDrive.Size;
                     }
 
+                    if (diskSpace != null)
+                    {
+                        rmu.DiskSpaceSize = diskSpace.Size;
+                        rmu.DiskFreeSpace = diskSpace.FreeSpace;
+                        rmu.DiskFreeSpacePercentage = diskSpace.FreeSpacePercentage;
+                    }
+
                     result.Add(rmu);
                 }
                 else
@@ -352,6 +546,7 @@ namespace SignedInUsers
                     {
                         RemoteMachineUser rmu = new RemoteMachineUser();
                         rmu.RemoteMachine = machine;
+                        rmu.Status = "Running";
                         rmu.Message = message;
                         rmu.Caption = caption;
                         rmu.Version = version;
@@ -380,10 +575,10 @@ namespace SignedInUsers
                             rmu.LogonTime = userDetails.LogonTime;
                         }
 
-                        if(_computerSystem != null)
+                        if (_computerSystem != null)
                         {
                             //rmu.CaptionTemp = _computerSystem.Caption;
-                            rmu.DNSHostName = _computerSystem.DNSHostName;
+                            rmu.HostName = _computerSystem.DNSHostName;
                             rmu.Domain = _computerSystem.Domain;
                             rmu.Model = _computerSystem.Model;
                             rmu.Name = _computerSystem.Name;
@@ -393,10 +588,17 @@ namespace SignedInUsers
                         }
 
 
-                        if(_diskDrive != null)
+                        if (_diskDrive != null)
                         {
                             rmu.HardDiskPartitions = _diskDrive.Partitions;
                             rmu.HardDiskSize = _diskDrive.Size;
+                        }
+
+                        if (diskSpace != null)
+                        {
+                            rmu.DiskSpaceSize = diskSpace.Size;
+                            rmu.DiskFreeSpace = diskSpace.FreeSpace;
+                            rmu.DiskFreeSpacePercentage = diskSpace.FreeSpacePercentage;
                         }
 
                         result.Add(rmu);
@@ -408,7 +610,7 @@ namespace SignedInUsers
 
             }
 
-            return result;
+            return RemoteVirtualMachine;
         }
 
         public void Remove()
@@ -441,14 +643,14 @@ namespace SignedInUsers
 
         private void SignOff()
         {
-            if (SelectedUserDetails == null)
+            if (SelectedUser == null)
             {
                 MessageBox.Show("Selected user cannot be empty.");
                 return;
             }
 
-            string SessionID = SelectedUserDetails.Id;
-            string ServerName = SelectedUserDetails.RemoteMachine;
+            string SessionID = SelectedUser.Id;
+            string ServerName = SelectedUser.MachineName;
 
             string command = $"logoff {SessionID} /server:{ServerName}";
 
@@ -476,7 +678,8 @@ namespace SignedInUsers
 
         private void ExportExcel()
         {
-            DataTable dt = ConvertToDataTable<RemoteMachineUser>(UserDetails);
+            //DataTable dt = ConvertToDataTable<RemoteMachineUser>(UserDetails);
+            DataTable dt = ConvertToDataTable<Machine>(VirtualMachines);
 
             string location = $"{AppDomain.CurrentDomain.BaseDirectory}\\ExportData";
 
@@ -503,6 +706,12 @@ namespace SignedInUsers
                 {
                     foreach (var item in row.ItemArray)
                     {
+                        if (item.ToString().Contains("System.Collections"))
+                        {
+                            csvContent.Append(",");
+                            continue;
+                        }
+
                         csvContent.Append(item.ToString().Replace("\r\n", " ").Replace("\n", " ") + ",");
                     }
                     csvContent.AppendLine();

@@ -113,10 +113,5 @@
   <ItemGroup>
     <Resource Include="Images\Search.png" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="RemoteMachines.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

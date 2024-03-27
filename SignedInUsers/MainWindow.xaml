@@ -45,7 +45,13 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0" Content="Path :" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                <TextBox Grid.Column="1" Margin="0,0,5,0" Height="30" TabIndex="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Text="{Binding FilePath}" />
+                <!--<TextBox Grid.Column="1" Margin="0,0,5,0" Height="30" TabIndex="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Text="{Binding FilePath}" />-->
+                <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="30" TabIndex="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" 
+                          ItemsSource ="{Binding FilePaths}" 
+                          SelectedValue ="{Binding FilePath}"
+                          SelectionChanged="ComboBox_SelectionChanged"
+                          IsEditable="True"
+                          />
 
                 <Button Grid.Column="2" Margin="1,0,1,0" Width="98" Style="{DynamicResource RoundedButton}"
                         TabIndex="1" Content="Browse" IsEnabled="{Binding IsEnable}"
@@ -64,12 +70,14 @@
 
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="236*" />
                     <ColumnDefinition Width="2" />
-                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="1181*" />
+                    <!--<ColumnDefinition Width="238*" />
+                    <ColumnDefinition Width="943*"/>-->
                 </Grid.ColumnDefinitions>
 
-                <ListBox ItemsSource="{Binding Machines}" SelectedItem="{Binding SelectedMachine}" 
+                <ListBox Grid.Column="0" ItemsSource="{Binding Machines}" SelectedItem="{Binding SelectedMachine}" 
                              BorderThickness="1" BorderBrush="Black" Background="Transparent" MouseDoubleClick="ListBox_MouseDoubleClick">
                     <ListBox.ContextMenu>
                         <ContextMenu>
@@ -79,33 +87,57 @@
                     </ListBox.ContextMenu>
                 </ListBox>
 
-                <GridSplitter Grid.Column="1" BorderBrush="Gray" HorizontalAlignment="Stretch" />
-                <DataGrid Grid.Column="2" Margin="0" ItemsSource="{Binding UserDetails}" SelectedItem="{Binding SelectedUserDetails}"
+                <GridSplitter BorderBrush="Gray" HorizontalAlignment="Stretch" Grid.Column="1" />
+
+                <TabControl Grid.Column="2" Margin="0,0,0,-2" Name="mainTabControl" SelectedIndex="0" BorderThickness="0" >
+                    <TabItem Header="Machines" Name="MachinesTabItem" IsSelected="True" Style="{DynamicResource CommonTabItem}">
+
+                        <DataGrid Grid.Column="2" Margin="2,10,0,0" ItemsSource="{Binding VirtualMachines}" SelectedItem="{Binding SelectedRemoteVirtualMachine}"
                               BorderBrush="Black" BorderThickness="1" ScrollViewer.CanContentScroll="True" 
                               AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent"
-                              HeadersVisibility="Column" RowHeight="20">
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightSkyBlue"/>
-                    </DataGrid.Resources>
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Sign Off" Command="{Binding SignOffCommand}" IsEnabled="{Binding IsEnable}" />
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                    <DataGrid.Columns>
+                              HeadersVisibility="Column" RowHeight="20" Grid.ColumnSpan="3">
+                            <DataGrid.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightSkyBlue"/>
+                            </DataGrid.Resources>
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="RemoteMachine">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="Machine" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding RemoteMachine}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="0" Background="Transparent"  IsReadOnly="True"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                            <DataGrid.Columns>
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Model">
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="MachineName">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Machine" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding MachineName}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="0" Background="Transparent"  IsReadOnly="True"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Owner">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Owner" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Owner}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="0" Background="Transparent"  IsReadOnly="True"
+                                             TextWrapping="NoWrap" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Status">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Status" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Status}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="0" Background="Transparent"  IsReadOnly="True"
+                                             TextWrapping="NoWrap" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <!--<DataGridTemplateColumn CanUserSort="True" SortMemberPath="Model">
                             <DataGridTemplateColumn.Header>
                                 <Label Content="Model" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
                             </DataGridTemplateColumn.Header>
@@ -115,36 +147,36 @@
                                              TextWrapping="NoWrap" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        </DataGridTemplateColumn>-->
 
-                        
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="NumberOfLogicalProcessors">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="Processors #" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding NumberOfLogicalProcessors}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="NumberOfLogicalProcessors">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Processors" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding NumberOfLogicalProcessors}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
                                              TextWrapping="NoWrap" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="TotalPhysicalMemory">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="RAM" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding TotalPhysicalMemory}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="TotalPhysicalMemory">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="RAM" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding TotalPhysicalMemory}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
                                              TextWrapping="NoWrap" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="HardDiskSize">
+                                <!--<DataGridTemplateColumn CanUserSort="True" SortMemberPath="HardDiskSize">
                             <DataGridTemplateColumn.Header>
                                 <Label Content="Hard Disk" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
                             </DataGridTemplateColumn.Header>
@@ -154,9 +186,45 @@
                                              TextWrapping="NoWrap" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        </DataGridTemplateColumn>-->
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="UserName">
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="DiskSpaceSize">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Disk Size" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding DiskSpaceSize}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+                                             TextWrapping="NoWrap" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="DiskFreeSpace">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Free Space" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding DiskFreeSpace}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+                                             TextWrapping="NoWrap" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="DiskFreeSpacePercentage">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Free Space %" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding DiskFreeSpacePercentage}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+                                             TextWrapping="NoWrap" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <!--<DataGridTemplateColumn CanUserSort="True" SortMemberPath="UserName">
                             <DataGridTemplateColumn.Header>
                                 <Label Content="User Name" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
                             </DataGridTemplateColumn.Header>
@@ -184,7 +252,7 @@
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Text="{Binding IdleTime}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"/>
+                                    <TextBox Text="{Binding IdleTime}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -217,108 +285,108 @@
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Text="{Binding Id}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" HorizontalContentAlignment="Center" />
+                                    <TextBox Text="{Binding Id}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        </DataGridTemplateColumn>-->
 
 
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Caption">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="Caption" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding Caption}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Caption">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Caption" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Caption}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Version" MaxWidth="60">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="Version" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding Version}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Version" MaxWidth="60">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Version" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Version}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="OSArchitecture" MaxWidth="70">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="OS Type" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding OSArchitecture}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" HorizontalContentAlignment="Center" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="OSArchitecture" MaxWidth="70">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="OS Type" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding OSArchitecture}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" HorizontalContentAlignment="Center" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="LastBootUpTime">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="Last BootUp Time" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding LastBootUpTime}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent"  IsReadOnly="True" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="LastBootUpTime">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Last BootUp Time" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding LastBootUpTime}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent"  IsReadOnly="True" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Organization">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="Organization" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding Organization}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Organization">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Organization" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Organization}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="NumberOfUsers" MaxWidth="60">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="#Users" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding NumberOfUsers}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" HorizontalContentAlignment="Center" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="NumberOfUsers" MaxWidth="60">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="#Users" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding NumberOfUsers}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
 
-
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Message">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="Message" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding Message}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="HardDiskPartitions">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="HDD Partitions" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding HardDiskPartitions}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
                                              TextWrapping="NoWrap" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
 
-                        <DataGridTemplateColumn CanUserSort="True" SortMemberPath="HardDiskPartitions">
-                            <DataGridTemplateColumn.Header>
-                                <Label Content="Hard Disk Partitions" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
-                            </DataGridTemplateColumn.Header>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Text="{Binding HardDiskPartitions}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Message">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Message" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Message}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"
                                              TextWrapping="NoWrap" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
 
-                        <!--<DataGridTemplateColumn CanUserSort="True" SortMemberPath="Caption Other">
+                                <!--<DataGridTemplateColumn CanUserSort="True" SortMemberPath="Caption Other">
                             <DataGridTemplateColumn.Header>
                                 <Label Content="Caption Other" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
                             </DataGridTemplateColumn.Header>
@@ -331,7 +399,7 @@
                         </DataGridTemplateColumn>-->
 
 
-                        <!--<DataGridTemplateColumn CanUserSort="True" SortMemberPath="DNSHostName">
+                                <!--<DataGridTemplateColumn CanUserSort="True" SortMemberPath="DNSHostName">
                             <DataGridTemplateColumn.Header>
                                 <Label Content="DNSHostName" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
                             </DataGridTemplateColumn.Header>
@@ -344,7 +412,7 @@
                         </DataGridTemplateColumn>-->
 
 
-                        <!--<DataGridTemplateColumn CanUserSort="True" SortMemberPath="Name">
+                                <!--<DataGridTemplateColumn CanUserSort="True" SortMemberPath="Name">
                             <DataGridTemplateColumn.Header>
                                 <Label Content="Name" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
                             </DataGridTemplateColumn.Header>
@@ -357,8 +425,112 @@
                         </DataGridTemplateColumn>-->
 
 
-                    </DataGrid.Columns>
-                </DataGrid>
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+                    </TabItem>
+
+                    <TabItem Header="Users" Name="usersTabItem" IsSelected="False" Style="{DynamicResource CommonTabItem}" >
+                        <DataGrid Grid.Column="2" Margin="2,10,0,0" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}"
+                              BorderBrush="Black" BorderThickness="1" ScrollViewer.CanContentScroll="True" 
+                              AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent"
+                              HeadersVisibility="Column" RowHeight="20" Grid.ColumnSpan="3">
+                            <DataGrid.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightSkyBlue"/>
+                            </DataGrid.Resources>
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Sign Off" Command="{Binding SignOffCommand}" IsEnabled="{Binding IsEnable}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <DataGrid.Columns>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="MachineName" Width="*">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Machine" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding MachineName}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="0" Background="Transparent"  IsReadOnly="True"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="UserName" Width="*">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="User Name" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding UserName}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="0" Background="Transparent"  IsReadOnly="True"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="State" Width="*">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="State" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding State}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent"  IsReadOnly="True"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="IdleTime" Width="*">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Idle Time" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding IdleTime}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="LogonTime" Width="*">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Last Login" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding LogonTime}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="SessionName" Width="*">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Session Name" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding SessionName}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Id"  Width="*">
+                                    <DataGridTemplateColumn.Header>
+                                        <Label Content="Id" FontSize="13" HorizontalContentAlignment="Center" HorizontalAlignment="Center" />
+                                    </DataGridTemplateColumn.Header>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Id}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="-1" Background="Transparent" IsReadOnly="True" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                    </TabItem>
+
+                </TabControl>
+
             </Grid>
             <!--</Border>-->
         </Grid>

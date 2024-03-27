@@ -1,0 +1,118 @@
+[
+  {
+    "Owner": "KMRS",
+    "MachineNames": [ "DC", "INPSSANALYTICS", "INPSSDB", "INPSSMobile", "INPSSOCRAPP", "INPSSOCDAPP", "INPSSOCDWEB" ]
+  },
+  {
+    "Owner": "KONAKALLA Satyavathi N",
+    "MachineNames": [ "IN-HSIMFRATP", "IN-PERFATP1", "IN-PERFATP2", "IN-CCIRORAVM01", "IN-COEWEB", "IN-IPSRVVM01", "IN-IPSRVVM03", "IN-SICIVM", "IN-HSIMFRDEV", "IN-CCIRAPPVM02", "IN-125DEV", "IN-127PHXDB", "IN-37SELE", "INHSI-RMS2022", "IN-MFR2022", "IN-RMS128DEVDB", "IN-RMSDEVAPP", "IN-SELE2", "IN-SELE3" ]
+  },
+  {
+    "Owner": "Chakradhar",
+    "MachineNames": [ "IN-HSIMFRCLDSVR", "IN-37SELE1", "IN-HSIMFRDEVIT", "IN-HSIMFRDBQA", "IN-HSIMFRDBQAIT", "IN-HSIMFRWS19QA" ]
+  },
+  {
+    "Owner": "Srinivas Yerrathota",
+    "MachineNames": [ "inhsioncall14", "INHSIONCALLVM14", "INHSIONCALWIN11", "INHSIONCALLVM13", "INHSIONCALLVM99", "INAutoDisp", "INHSIVM01A", "INHSIONCALLVM22", "INHSIVM02A", "INHSIVM17", "INHSIONCALLDB", "INHSIONCALLVM01", "INHSIONCALLVM05", "INHSIONCALLVM08", "INHSIONCALLVM20", "INHSIONCALLVM21", "INHSIONCALLVM23", "INHSIONCALLVM24", "INHSIONCALLVM26", "INHSIONCALLVM27", "INHSIONCALLVM28", "INHSIONCALLVM29", "INHSIONCALLVM30", "INHSIVM01", "INHSIVM05", "INHSIVM06", "INHSIVM07", "INHSIVM09" ]
+  },
+  {
+    "Owner": "Venkata Pavan Bhimaraju",
+    "MachineNames": [ "in-hsioncallatp", "IN-HSIONCALLSP1", "INHSIONCALLQA3", "INPERFDISPDB", "INPERFDISPAPP", "INHSIONCALLQA1", "INHSIONCALLQA2" ]
+  },
+  {
+    "Owner": "Unknown",
+    "MachineNames": [ "INHSISP16", "IN-HSIVM1", "IN-HSIVM2", "IN-CCIRAPPVM02", "IN-CCIRORAVM02", "IN-OCDEV", "IN-QA-12-DB", "IN-SGIFSDBVM01", "IN-IL2012", "IN-RMS2012", "IN-ITWIN11" ]
+  },
+  {
+    "Owner": "GORAPALLI Pushpa",
+    "MachineNames": [ "IN-IBRCN10", "IN-HSIRMS2016", "IN-HSIRMS2019", "IN-IBR2012", "IN-IBRAL", "IN-IBRFL", "IN-IBRIL10", "IN-IBRLA", "IN-IBRS19DEMO", "IN-IBRSOH", "IN-IBRTX10", "IN-NIBRSDB1", "INHSI-RMS1064", "IN-IBRS19", "IN-USPS28", "IN-USPS29", "IN-USPS6", "IN-IBRCA", "IN-IBRCN", "IN-IBRFL2", "IN-IBRGA", "IN-IBRHI", "IN-IBRIL", "IN-IBRNC", "IN-IBROR", "IN-NIBRSDB10", "IN-USPS27", "IN-IBRMA10" ]
+  },
+  {
+    "Owner": "Nataraju Janapalli",
+    "MachineNames": [ "IN-ISECCORE", "IN-IPSLAVM02", "IN-ADDRESSBLDVM", "IN-ILW1002", "IN-IPSDBSRV2", "IN-IPSESX3VM01", "IN-IPSESX3VM02", "INLEDQASRV2VM1", "inledqasrv7vm2", "IN-LINKBLDVM", "IN-ISECBLD", "INLEDQASRV1SGI", "INLEDQASRV3", "INLEDQASRV5SGI", "IN-SECW11", "IN-ISECDB", "IN-ISECDB22", "IN-ISECDEV", "IN-ISECDEV01", "IN-ISECDEV02", "IN-ISECDEV03", "IN-ISECQA", "IN-ISECLU", "IN-ISECQA22", "IN-ISECQACLIENT" ]
+  },
+  {
+    "Owner": "Jyothi Gundlapalli",
+    "MachineNames": [ "INOCANALYTICVM3", "in-ocasetest1", "in-ocasetest2", "in-ocasetest3", "in-ocasetest4", "in-ocasetest5", "IN-BIDBVM01", "IN-BIDBVM02", "IN-BIORAVM002", "IN-BIORAVM003", "IN-BIRMSVM001", "IN-BISQLVM001", "IN-BISQLVM003", "IN-OCANLYTICVM2", "IN-OCAONPREMDEV", "IN-OCAONPREMQA", "IN-OCAOPDB2", "IN-OCAPREMTEST", "in-bicldvm01", "IN-OCANLYTICVM1" ]
+  },
+  {
+    "Owner": "Rajendra Telugu",
+    "MachineNames": [ "IN-SIGRPA", "IN-RajendraVM", "IN-ARCHITECT1" ]
+  },
+  {
+    "Owner": "Satyasridevi Seemakurthi",
+    "MachineNames": [ "invmocp1", "invmocp2", "invmocp3", "invmocp4", "invmocp5", "invmocp6", "invmocp7", "invmocp8", "invmocp9" ]
+  },
+  {
+    "Owner": "Suresh Samudrala",
+    "MachineNames": [ "IN-CAPEREDIS", "in-CapePerfVM01", "IN-CAPEOnCalDev" ]
+  },
+  {
+    "Owner": "Sudhir Prasad",
+    "MachineNames": [ "IN-CAPEW10GER", "IN-CAPEW11VM02", "IN-CAPEW12VM02", "IN-CAPEW19VM01", "IN-CAPEW19VM04", "IN-NDNVATP", "INSGICAD934SQL", "IN-CAPEW10VM05", "IN-CAPEW16VM04", "IN-CAPEW16VM05", "IN-CAPEW19VM03", "IN-CAPEW22VM01", "IN-NDNVATP1", "INSGICAD94SDB", "IN-CAPEW10VM01", "IN-CAPEW10VM02", "IN-CAPEW10VM04", "IN-CAPEW10VM06", "IN-CAPEW11VM01", "IN-CAPEW12VM01", "IN-CAPEW16ORDB", "IN-CAPEW16ORDB2", "IN-CAPEW16VM01", "IN-CAPEW16VM02", "IN-CAPEW16VM03", "IN-CAPEW19VM02", "IN-CAPEW22VM02", "IN-IPSND1" ]
+  },
+  {
+    "Owner": "Kadiri Nirmala Jyothirmai",
+    "MachineNames": [ "IN-COREOMS", "IN-HSIHAMONGO1", "IN-HSIHAMONGO2", "IN-HSIOMS02", "IN-MRDEV1", "IN-OMAONPREM", "IN-OMS", "IN-LBTEST", "IN-MR94", "IN-MRQA94" ]
+  },
+  {
+    "Owner": "Ravi Arepalli",
+    "MachineNames": [ "INHSICTVM03", "INHSICTVM01" ]
+  },
+  {
+    "Owner": "Sanjeev Lade",
+    "MachineNames": [ "INHSIOMS02", "IN-HSIOMS2303", "INHSIOMS03", "INHSIOMSDEV01", "IN-QAOMS", "ONPREMONCALL1", "ONPREMONCALL2" ]
+  },
+  {
+    "Owner": "Naveen Dubasi",
+    "MachineNames": [ "INHSIUBUNTU01" ]
+  },
+  {
+    "Owner": "Sukumar Balaji",
+    "MachineNames": [ "INHSIVM18" ]
+  },
+  {
+    "Owner": "Chandra Viyyapu",
+    "MachineNames": [ "IN-MISFITSCAD92", "IN-WRAPPVM01", "IN-WRAPPVM36", "IN-M16CAD91EF64", "IN-M19CAD93EF63", "IN-M19CAD93EF64", "IN-M19CAD94EF64", "IN-M19CAD94EF64", "IN-MISFITSCAD94" ]
+  },
+  {
+    "Owner": "Manohar Rudra",
+    "MachineNames": [ "IN-PSBuildime15", "IN-IPSND3" ]
+  },
+  {
+    "Owner": "Shiva Krishnamurti",
+    "MachineNames": [ "IN-GTQAW11VM1", "IN-GTQAWIN22VM1", "IN-GTQAWIN22VM2", "IN-NWRELTEST", "IN-GTQADBVM01", "IN-GTQADBVM02", "IN-GTQADBVM03", "IN-GTQAW10VM1", "IN-GTQAW10VM3", "IN-GTQAW11VM2", "IN-GTQAW11VM3", "IN-GTQAWIN16FR", "IN-GTQAWIN19VM3", "IN-GTSTBNVSVM1", "ININSQASRVVM20", "IN-GTQADBVM04", "IN-NW20WIN2K16", "IN-NWBLDAGNT", "IN-NWORA19DBVM1", "IN-NWORA19DBVM2", "IN-NWQASP20SRVM", "IN-NWQAW19VM1", "IN-NWQAW19VM3", "IN-NWQAWIN22VM1", "IN-NWRGSDB", "IN-NWMWIN22VM1", "IN-SADBSRV4" ]
+  },
+  {
+    "Owner": "Chethan Srikrishna",
+    "MachineNames": [ "IN-HSI1433VM01" ]
+  },
+  {
+    "Owner": "Dineshkumar Mahadevan",
+    "MachineNames": [ "IN-IPRSRVTEST", "INHSIVM19" ]
+  },
+  {
+    "Owner": "Rajya Lakshmi Vulava",
+    "MachineNames": [ "INPSBuildIME165" ]
+  },
+  {
+    "Owner": "Pramod Valipireddy",
+    "MachineNames": [ "IN-ERDDEVVM01", "IN-HGD-AG2", "IN-HGD-DEV", "IN-HGDIXMASTER", "IN-HGDJMASTER", "IN-HGD-JMASTER", "IN-HGD-MATP14", "IN-HGD-MATP2", "IN-HGD-MATP5", "IN-HGD-MATP6", "IN-HGD-MATP9", "IN-HGD-POSTGIS", "IN-HGD-RATP1", "IN-HGD-SERV2019", "IN-HGD-SMO", "IN-HGD-SMSDK", "IN-HGD-SQLDB", "IN-HGD-TIER1", "IN-HGD-TSRV2019", "IN-HGD-DP2", "IN-HGD-MAPPX", "IN-HGD-SRV2022" ]
+  },
+  {
+    "Owner": "Rajesh Puducheri",
+    "MachineNames": [ "in-indspvm01", "IN-INDSPVM06", "IN-INDSPVM07", "IN-INDSPVM12", "IN-INSQASRVVM12", "IN-INSQASRVVM28", "ININSQASRVVM31", "ININSQASRVVM36" ]
+  },
+  {
+    "Owner": "Rajesh Chalamalasetty",
+    "MachineNames": [ "INHSI-RMS2019" ]
+  },
+  {
+    "Owner": "Suryam Garimella",
+    "MachineNames": [ "INHSIVM04" ]
+  },
+  {
+    "Owner": "Akhilesh Patra",
+    "MachineNames": [ "INHSIONCALLVM06", "INHSIONCALLVM07", "INHSIONCALLVM09", "INHSIONCALLVM25" ]
+  }
+]

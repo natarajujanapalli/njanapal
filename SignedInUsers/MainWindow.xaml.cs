@@ -51,5 +51,11 @@ namespace SignedInUsers
 
             System.Diagnostics.Process.Start(fileName);
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_viewmodel != null)
+                _viewmodel.Load();
+        }
     }
 }
