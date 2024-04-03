@@ -130,6 +130,14 @@ namespace SignedInUsers
         }
 
 
+        private string _registryScript;
+        public string RegistryScript
+        {
+            get { return _registryScript; }
+            set { _registryScript = value; RaisePropertyChanged("RegistryScript"); }
+        }
+
+
         public ObservableCollection<Machine> RemoteVirtualMachines { get; set; }
 
 
@@ -178,6 +186,8 @@ namespace SignedInUsers
             Users = new ObservableCollection<User>();
 
             FilePaths = GetFilePaths();
+
+            RegistryScript = string.Empty;
         }
 
         private ObservableCollection<string> GetFilePaths()
@@ -226,6 +236,8 @@ namespace SignedInUsers
                     if (!string.IsNullOrWhiteSpace(vm.MachineName.ToUpper().Trim()) && !this.Machines.Contains(vm.MachineName.ToUpper().Trim()))
                         this.Machines.Add(vm.MachineName.ToUpper().Trim());
                 }
+
+                RegistryScript = handler.GetRegistryScript(this.Machines);
             }
             catch (Exception ex)
             {
@@ -253,7 +265,7 @@ namespace SignedInUsers
                 VirtualMachines = new ObservableCollection<Machine>();
                 Users = new ObservableCollection<User>();
 
-                foreach (string machine in this.Machines)
+                foreach (string machine in this.Machines.OrderBy(r => r))
                 {
                     this.Status = $"Processing : {++i}/{this.Machines.Count} - '{machine}'";
                     //Process(machine);
@@ -440,7 +452,7 @@ namespace SignedInUsers
 
                     if (_computerSystem != null)
                     {
-                        RemoteVirtualMachine.HostName = _computerSystem.DNSHostName;
+                        //RemoteVirtualMachine.HostName = _computerSystem.DNSHostName;
                         RemoteVirtualMachine.Domain = _computerSystem.Domain;
                         RemoteVirtualMachine.Model = _computerSystem.Model;
                         RemoteVirtualMachine.Name = _computerSystem.Name;
@@ -715,9 +727,12 @@ namespace SignedInUsers
                             csvContent.Append(",");
                             continue;
                         }
-
-                        csvContent.Append(item.ToString().Replace("\r\n", " ").Replace("\n", " ") + ",");
+                        if (item.ToString().Contains("GB"))
+                            csvContent.Append(item.ToString().Replace(" GB", "").Replace("\r\n", " ").Replace("\n", " ") + ",");
+                        else
+                            csvContent.Append(item.ToString().Replace("\r\n", " ").Replace("\n", " ") + ",");
                     }
+
                     csvContent.AppendLine();
                 }
 

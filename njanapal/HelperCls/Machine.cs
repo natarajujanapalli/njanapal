@@ -11,6 +11,7 @@ namespace njanapal
     {
         public string MachineName { get; set; }
         public string Owner { get; set; }
+        public string Purpose { get; set; }
         public string Status { get; set; }
 
         public string HostName { get; set; }

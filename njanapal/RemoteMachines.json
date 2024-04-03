@@ -1,118 +1,1612 @@
 [
   {
-    "Owner": "KMRS",
-    "MachineNames": [ "DC", "INPSSANALYTICS", "INPSSDB", "INPSSMobile", "INPSSOCRAPP", "INPSSOCDAPP", "INPSSOCDWEB" ]
+    "Owner": "KANDRU Srinivas M (KMRS)",
+    "MachineNames": [
+      {
+        "NodeName": "DC",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Domain controler for Perf network"
+      },
+      {
+        "NodeName": "INPSSANALYTICS",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "PSS Demo env. "
+      },
+      {
+        "NodeName": "INPSSDB",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "PSS Demo env. DB server for OCD, OCR and Security Products. Also SSRS server for OCR."
+      },
+      {
+        "NodeName": "INPSSMobile",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "PSS Demo env. "
+      },
+      {
+        "NodeName": "INPSSOCRAPP",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "PSS Demo env. "
+      },
+      {
+        "NodeName": "INPSSOCDAPP",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "PSS Demo env. "
+      },
+      {
+        "NodeName": "INPSSOCDWEB",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "PSS Demo env. "
+      }
+    ]
   },
   {
     "Owner": "KONAKALLA Satyavathi N",
-    "MachineNames": [ "IN-HSIMFRATP", "IN-PERFATP1", "IN-PERFATP2", "IN-CCIRORAVM01", "IN-COEWEB", "IN-IPSRVVM01", "IN-IPSRVVM03", "IN-SICIVM", "IN-HSIMFRDEV", "IN-CCIRAPPVM02", "IN-125DEV", "IN-127PHXDB", "IN-37SELE", "INHSI-RMS2022", "IN-MFR2022", "IN-RMS128DEVDB", "IN-RMSDEVAPP", "IN-SELE2", "IN-SELE3" ]
+    "MachineNames": [
+      {
+        "NodeName": "IN-HSIMFRATP",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "MFR 2309.1 Application Server - Used by Testing, OCD and MFR APPS"
+      },
+      {
+        "NodeName": "IN-PERFATP1",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Execution of ATP\u0027s for MFR"
+      },
+      {
+        "NodeName": "IN-PERFATP2",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Execution of ATP\u0027s for MFR"
+      },
+      {
+        "NodeName": "IN-CCIRORAVM01",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA machine required by Misfits team"
+      },
+      {
+        "NodeName": "IN-COEWEB",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "DB Environment for OCR Applications of all the VMs"
+      },
+      {
+        "NodeName": "IN-IPSRVVM01",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "12.8 DB Server for Dev"
+      },
+      {
+        "NodeName": "IN-IPSRVVM03",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "12.8 App Server for Dev"
+      },
+      {
+        "NodeName": "IN-SICIVM",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Jenkins machine "
+      },
+      {
+        "NodeName": "IN-HSIMFRDEV",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "MFR 2309.1 Application Server - Used by Testing, OCD and MFR APPS"
+      },
+      {
+        "NodeName": "IN-CCIRAPPVM02",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "QA machine required by Misfits team for Address server testing "
+      },
+      {
+        "NodeName": "IN-125DEV",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "12.5 Dev client environment"
+      },
+      {
+        "NodeName": "IN-127PHXDB",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "12.7 Dev DB"
+      },
+      {
+        "NodeName": "IN-37SELE",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "OCR QA Environment for MFR, OCR App server"
+      },
+      {
+        "NodeName": "INHSI-RMS2022",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "OCR QA Environment for MFR for released n-1 version, OCR App server"
+      },
+      {
+        "NodeName": "IN-MFR2022",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "QA Environment for MFR for released n-1 version, Both APP \u0026 DB server"
+      },
+      {
+        "NodeName": "IN-RMS128DEVDB",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "12.8 Dev DB"
+      },
+      {
+        "NodeName": "IN-RMSDEVAPP",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "12.7 Dev App Server"
+      },
+      {
+        "NodeName": "IN-SELE2",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "OCR QA Environment"
+      },
+      {
+        "NodeName": "IN-SELE3",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "OCR 3.7"
+      }
+    ]
   },
   {
-    "Owner": "Chakradhar",
-    "MachineNames": [ "IN-HSIMFRCLDSVR", "IN-37SELE1", "IN-HSIMFRDEVIT", "IN-HSIMFRDBQA", "IN-HSIMFRDBQAIT", "IN-HSIMFRWS19QA" ]
+    "Owner": "REPAKA Rao Chakradhar",
+    "MachineNames": [
+      {
+        "NodeName": "IN-HSIMFRCLDSVR",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Visual Studio, MFR Application server in ISM"
+      },
+      {
+        "NodeName": "IN-37SELE1",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "OCR 2309.1 Application Server - Used by MFR Development"
+      },
+      {
+        "NodeName": "IN-HSIMFRDEVIT",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "MFR 2309.1 Application Server - Used by Development"
+      },
+      {
+        "NodeName": "IN-HSIMFRDBQA",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "MFR Dispatch DB Server - 1 (IN-HSIMFRWS19QADB) out of 5 instances are used. SQL Server 2019."
+      },
+      {
+        "NodeName": "IN-HSIMFRDBQAIT",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "MFR Dispatch DB Server - 4 out of 5 instances are used. SQL Server 2019."
+      },
+      {
+        "NodeName": "IN-HSIMFRWS19QA",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "MFR 2309.1 Application Server - Used by Development"
+      }
+    ]
   },
   {
-    "Owner": "Srinivas Yerrathota",
-    "MachineNames": [ "inhsioncall14", "INHSIONCALLVM14", "INHSIONCALWIN11", "INHSIONCALLVM13", "INHSIONCALLVM99", "INAutoDisp", "INHSIVM01A", "INHSIONCALLVM22", "INHSIVM02A", "INHSIVM17", "INHSIONCALLDB", "INHSIONCALLVM01", "INHSIONCALLVM05", "INHSIONCALLVM08", "INHSIONCALLVM20", "INHSIONCALLVM21", "INHSIONCALLVM23", "INHSIONCALLVM24", "INHSIONCALLVM26", "INHSIONCALLVM27", "INHSIONCALLVM28", "INHSIONCALLVM29", "INHSIONCALLVM30", "INHSIVM01", "INHSIVM05", "INHSIVM06", "INHSIVM07", "INHSIVM09" ]
+    "Owner": "YERRATHOTA Srinivasa K",
+    "MachineNames": [
+      {
+        "NodeName": "inhsioncall14",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "2209 OnCall App Server - QA"
+      },
+      {
+        "NodeName": "INHSIONCALLVM14",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "OnCall SQL Database Server (2019)"
+      },
+      {
+        "NodeName": "INHSIONCALWIN11",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Windows 11 testing and Oncall server"
+      },
+      {
+        "NodeName": "INHSIONCALLVM13",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Martin Testing - Danish 2303.7 OnCall App Server - QA"
+      },
+      {
+        "NodeName": "INHSIONCALLVM99",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "ProQA - Client testing."
+      },
+      {
+        "NodeName": "INAutoDisp",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "Auto Dispatch VM - DEV and QA"
+      },
+      {
+        "NodeName": "INHSIVM01A",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "OnCall 2303 App Server - QA"
+      },
+      {
+        "NodeName": "INHSIONCALLVM22",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "OnCall 2303 App Server - QA"
+      },
+      {
+        "NodeName": "INHSIVM02A",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "2309.0.3 OnCall Patch machine on 2309 RTD - QA"
+      },
+      {
+        "NodeName": "INHSIVM17",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "Selenium Automation Server for 2205"
+      },
+      {
+        "NodeName": "INHSIONCALLDB",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall SQL Database Server (2019)"
+      },
+      {
+        "NodeName": "INHSIONCALLVM01",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "ProQA Client Testing Server"
+      },
+      {
+        "NodeName": "INHSIONCALLVM05",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall SQL Database Server (2019)"
+      },
+      {
+        "NodeName": "INHSIONCALLVM08",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "2108 HF OnCall App Server  - QA"
+      },
+      {
+        "NodeName": "INHSIONCALLVM20",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall Oracle Database Server - 19C"
+      },
+      {
+        "NodeName": "INHSIONCALLVM21",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "2205 OnCall App Server - QA"
+      },
+      {
+        "NodeName": "INHSIONCALLVM23",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "2403 OnCall Dispatch Server - Srinivas"
+      },
+      {
+        "NodeName": "INHSIONCALLVM24",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "2403 OnCall Dispatch Server - Balaji"
+      },
+      {
+        "NodeName": "INHSIONCALLVM26",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "Playwright Automation Server - OnCall 2309.x"
+      },
+      {
+        "NodeName": "INHSIONCALLVM27",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "Playwright Automation Server - OnCall 2303.x"
+      },
+      {
+        "NodeName": "INHSIONCALLVM28",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "2309 OnCall App Server - QA"
+      },
+      {
+        "NodeName": "INHSIONCALLVM29",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall SQL Database Server 2022"
+      },
+      {
+        "NodeName": "INHSIONCALLVM30",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "Selenium Automation Server - OnCall 2309.x"
+      },
+      {
+        "NodeName": "INHSIVM01",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall SQL Database Server (2016)"
+      },
+      {
+        "NodeName": "INHSIVM05",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall SQL Database Server (2019)"
+      },
+      {
+        "NodeName": "INHSIVM06",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall 94 and Cad 94 App Server"
+      },
+      {
+        "NodeName": "INHSIVM07",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "AZDO Agent Pool Server - Visual Studio build deployment"
+      },
+      {
+        "NodeName": "INHSIVM09",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "Redis Server"
+      }
+    ]
   },
   {
-    "Owner": "Venkata Pavan Bhimaraju",
-    "MachineNames": [ "in-hsioncallatp", "IN-HSIONCALLSP1", "INHSIONCALLQA3", "INPERFDISPDB", "INPERFDISPAPP", "INHSIONCALLQA1", "INHSIONCALLQA2" ]
+    "Owner": "BHIMARAJU Venkata Pavan K",
+    "MachineNames": [
+      {
+        "NodeName": "in-hsioncallatp",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Automation Server for 2209 - QA"
+      },
+      {
+        "NodeName": "IN-HSIONCALLSP1",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Automation Server for 2303 - QA"
+      },
+      {
+        "NodeName": "INHSIONCALLQA3",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "QA vm for 2309 patches"
+      },
+      {
+        "NodeName": "INPERFDISPDB",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "Automation DB Server for 2309"
+      },
+      {
+        "NodeName": "INPERFDISPAPP",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "Automation App Server for 2309"
+      },
+      {
+        "NodeName": "INHSIONCALLQA1",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "2309.2.1 OnCall Patch testing machine"
+      },
+      {
+        "NodeName": "INHSIONCALLQA2",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "2309.1.2 OnCall Patch testing machine"
+      }
+    ]
   },
   {
     "Owner": "Unknown",
-    "MachineNames": [ "INHSISP16", "IN-HSIVM1", "IN-HSIVM2", "IN-CCIRAPPVM02", "IN-CCIRORAVM02", "IN-OCDEV", "IN-QA-12-DB", "IN-SGIFSDBVM01", "IN-IL2012", "IN-RMS2012", "IN-ITWIN11" ]
+    "MachineNames": [
+      {
+        "NodeName": "INHSISP16",
+        "HostName": "IN-PERFLAB",
+        "Purpose": ""
+      },
+      {
+        "NodeName": "IN-HSIVM1",
+        "HostName": "IN-PERFLAB",
+        "Purpose": ""
+      },
+      {
+        "NodeName": "IN-HSIVM2",
+        "HostName": "IN-PERFLAB",
+        "Purpose": ""
+      },
+      {
+        "NodeName": "IN-CCIRAPPVM02",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Misfits"
+      },
+      {
+        "NodeName": "IN-CCIRORAVM02",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Misfits"
+      },
+      {
+        "NodeName": "IN-OCDEV",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": ""
+      },
+      {
+        "NodeName": "IN-QA-12-DB",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Misfits"
+      },
+      {
+        "NodeName": "IN-SGIFSDBVM01",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": ""
+      },
+      {
+        "NodeName": "IN-IL2012",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": ""
+      },
+      {
+        "NodeName": "IN-RMS2012",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": ""
+      },
+      {
+        "NodeName": "IN-ITWIN11",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": ""
+      }
+    ]
   },
   {
     "Owner": "GORAPALLI Pushpa",
-    "MachineNames": [ "IN-IBRCN10", "IN-HSIRMS2016", "IN-HSIRMS2019", "IN-IBR2012", "IN-IBRAL", "IN-IBRFL", "IN-IBRIL10", "IN-IBRLA", "IN-IBRS19DEMO", "IN-IBRSOH", "IN-IBRTX10", "IN-NIBRSDB1", "INHSI-RMS1064", "IN-IBRS19", "IN-USPS28", "IN-USPS29", "IN-USPS6", "IN-IBRCA", "IN-IBRCN", "IN-IBRFL2", "IN-IBRGA", "IN-IBRHI", "IN-IBRIL", "IN-IBRNC", "IN-IBROR", "IN-NIBRSDB10", "IN-USPS27", "IN-IBRMA10" ]
+    "MachineNames": [
+      {
+        "NodeName": "IN-IBRCN10",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "QA Environment for NIBRS State Canada 10.0"
+      },
+      {
+        "NodeName": "IN-HSIRMS2016",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Florida 10.0"
+      },
+      {
+        "NodeName": "IN-HSIRMS2019",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "NIBRS Security Patch Testing"
+      },
+      {
+        "NodeName": "IN-IBR2012",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State  Texas 2.3"
+      },
+      {
+        "NodeName": "IN-IBRAL",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Albama 10.0"
+      },
+      {
+        "NodeName": "IN-IBRFL",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Florida 2.3"
+      },
+      {
+        "NodeName": "IN-IBRIL10",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State illinois 10.0"
+      },
+      {
+        "NodeName": "IN-IBRLA",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Lousiana 10.0"
+      },
+      {
+        "NodeName": "IN-IBRS19DEMO",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "NIBRS Dev Testing"
+      },
+      {
+        "NodeName": "IN-IBRSOH",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Ohio 10.0"
+      },
+      {
+        "NodeName": "IN-IBRTX10",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Texas 10.0"
+      },
+      {
+        "NodeName": "IN-NIBRSDB1",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "QA DB server machine environment for NIBRS  2.3 states"
+      },
+      {
+        "NodeName": "INHSI-RMS1064",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "NIBRS Security Patch Testing"
+      },
+      {
+        "NodeName": "IN-IBRS19",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "OCR QA Environment for NIBRS FD 10.0"
+      },
+      {
+        "NodeName": "IN-USPS28",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Arizona 2.3"
+      },
+      {
+        "NodeName": "IN-USPS29",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Virginia 2.3"
+      },
+      {
+        "NodeName": "IN-USPS6",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State NewYork 10.0"
+      },
+      {
+        "NodeName": "IN-IBRCA",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State California 10.0"
+      },
+      {
+        "NodeName": "IN-IBRCN",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Canada 2.3"
+      },
+      {
+        "NodeName": "IN-IBRFL2",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Florida HYB"
+      },
+      {
+        "NodeName": "IN-IBRGA",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Georgia 10.0"
+      },
+      {
+        "NodeName": "IN-IBRHI",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Hawaii 2.3"
+      },
+      {
+        "NodeName": "IN-IBRIL",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State illinois 2.3"
+      },
+      {
+        "NodeName": "IN-IBRNC",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State North Carolina 10.0"
+      },
+      {
+        "NodeName": "IN-IBROR",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Oregon 2.3"
+      },
+      {
+        "NodeName": "IN-NIBRSDB10",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA DB server machine environment for NIBRS FD 10.0"
+      },
+      {
+        "NodeName": "IN-USPS27",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Colorado NIBRS 2.3"
+      },
+      {
+        "NodeName": "IN-IBRMA10",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "QA Environment for NIBRS State Massachusetts 10.0"
+      }
+    ]
   },
   {
-    "Owner": "Nataraju Janapalli",
-    "MachineNames": [ "IN-ISECCORE", "IN-IPSLAVM02", "IN-ADDRESSBLDVM", "IN-ILW1002", "IN-IPSDBSRV2", "IN-IPSESX3VM01", "IN-IPSESX3VM02", "INLEDQASRV2VM1", "inledqasrv7vm2", "IN-LINKBLDVM", "IN-ISECBLD", "INLEDQASRV1SGI", "INLEDQASRV3", "INLEDQASRV5SGI", "IN-SECW11", "IN-ISECDB", "IN-ISECDB22", "IN-ISECDEV", "IN-ISECDEV01", "IN-ISECDEV02", "IN-ISECDEV03", "IN-ISECQA", "IN-ISECLU", "IN-ISECQA22", "IN-ISECQACLIENT" ]
+    "Owner": "JANAPALLI Nataraju",
+    "MachineNames": [
+      {
+        "NodeName": "IN-ISECCORE",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Environment to support Security Guardian on Windows Server Core OS"
+      },
+      {
+        "NodeName": "IN-IPSLAVM02",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "ILEADS"
+      },
+      {
+        "NodeName": "IN-ADDRESSBLDVM",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "I/Address Build machine"
+      },
+      {
+        "NodeName": "IN-ILW1002",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "ILEADS Monthly Patch testing"
+      },
+      {
+        "NodeName": "IN-IPSDBSRV2",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "ILEADS"
+      },
+      {
+        "NodeName": "IN-IPSESX3VM01",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "ILEADS"
+      },
+      {
+        "NodeName": "IN-IPSESX3VM02",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "ILEADS"
+      },
+      {
+        "NodeName": "INLEDQASRV2VM1",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "Ileads QA environment"
+      },
+      {
+        "NodeName": "inledqasrv7vm2",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "Ileads QA environment"
+      },
+      {
+        "NodeName": "IN-LINKBLDVM",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "I/LEADS-Link Build Machine"
+      },
+      {
+        "NodeName": "IN-ISECBLD",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "Security Guardian Build Machine"
+      },
+      {
+        "NodeName": "INLEDQASRV1SGI",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "Ileads QA environment"
+      },
+      {
+        "NodeName": "INLEDQASRV3",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "Ileads QA environment"
+      },
+      {
+        "NodeName": "INLEDQASRV5SGI",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "Ileads QA environment"
+      },
+      {
+        "NodeName": "IN-SECW11",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "Security Guardian client machine to test it on Windows 11"
+      },
+      {
+        "NodeName": "IN-ISECDB",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "DB server where it has SQL Server 2016"
+      },
+      {
+        "NodeName": "IN-ISECDB22",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "DB server where it has SQL Server 2022"
+      },
+      {
+        "NodeName": "IN-ISECDEV",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "Development environment for all latest Security Guardian builds."
+      },
+      {
+        "NodeName": "IN-ISECDEV01",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "Dev environment for Security Guardian Product v2209"
+      },
+      {
+        "NodeName": "IN-ISECDEV02",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "Dev environment for Security Guardian Product v2303"
+      },
+      {
+        "NodeName": "IN-ISECDEV03",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "Dev environment for Security Guardian Product v2309"
+      },
+      {
+        "NodeName": "IN-ISECQA",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA environment for all latest Security Guardian build"
+      },
+      {
+        "NodeName": "IN-ISECLU",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": ""
+      },
+      {
+        "NodeName": "IN-ISECQA22",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA environment for Security Guardian Product (Windows server 2022)"
+      },
+      {
+        "NodeName": "IN-ISECQACLIENT",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "QA Client machine for Security Guardian Product"
+      }
+    ]
   },
   {
-    "Owner": "Jyothi Gundlapalli",
-    "MachineNames": [ "INOCANALYTICVM3", "in-ocasetest1", "in-ocasetest2", "in-ocasetest3", "in-ocasetest4", "in-ocasetest5", "IN-BIDBVM01", "IN-BIDBVM02", "IN-BIORAVM002", "IN-BIORAVM003", "IN-BIRMSVM001", "IN-BISQLVM001", "IN-BISQLVM003", "IN-OCANLYTICVM2", "IN-OCAONPREMDEV", "IN-OCAONPREMQA", "IN-OCAOPDB2", "IN-OCAPREMTEST", "in-bicldvm01", "IN-OCANLYTICVM1" ]
+    "Owner": "GUNDLAPALLI Jyothi",
+    "MachineNames": [
+      {
+        "NodeName": "INOCANALYTICVM3",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Environment for SQL Server 2022 version support"
+      },
+      {
+        "NodeName": "in-ocasetest1",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Dev Environment for SQL Server 2019"
+      },
+      {
+        "NodeName": "in-ocasetest2",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "QA Environment for SQL Server 2016"
+      },
+      {
+        "NodeName": "in-ocasetest3",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "QA Environment for SQL Server 2019"
+      },
+      {
+        "NodeName": "in-ocasetest4",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "QA Environment for SQL Server 2016"
+      },
+      {
+        "NodeName": "in-ocasetest5",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "QA Environment for Oracle Support Testing"
+      },
+      {
+        "NodeName": "IN-BIDBVM01",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Developer vm for oracle support"
+      },
+      {
+        "NodeName": "IN-BIDBVM02",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Developer vm for oracle support"
+      },
+      {
+        "NodeName": "IN-BIORAVM002",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  "
+      },
+      {
+        "NodeName": "IN-BIORAVM003",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  "
+      },
+      {
+        "NodeName": "IN-BIRMSVM001",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  "
+      },
+      {
+        "NodeName": "IN-BISQLVM001",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  "
+      },
+      {
+        "NodeName": "IN-BISQLVM003",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  "
+      },
+      {
+        "NodeName": "IN-OCANLYTICVM2",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  for 2019SqlServer"
+      },
+      {
+        "NodeName": "IN-OCAONPREMDEV",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  for 2019SqlServer"
+      },
+      {
+        "NodeName": "IN-OCAONPREMQA",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  for 2016SqlServer"
+      },
+      {
+        "NodeName": "IN-OCAOPDB2",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  for 2022SqlServer"
+      },
+      {
+        "NodeName": "IN-OCAPREMTEST",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Develop/Test OCA  for 2019SqlServer"
+      },
+      {
+        "NodeName": "in-bicldvm01",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "Develop/Test OCA"
+      },
+      {
+        "NodeName": "IN-OCANLYTICVM1",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "Develop/Test OCA"
+      }
+    ]
   },
   {
-    "Owner": "Rajendra Telugu",
-    "MachineNames": [ "IN-SIGRPA", "IN-RajendraVM", "IN-ARCHITECT1" ]
+    "Owner": "TELUGU GUVVALA Rajendra Prasad",
+    "MachineNames": [
+      {
+        "NodeName": "IN-SIGRPA",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Billing Report Automation - Managed by SRIKRISHNA Chethan"
+      },
+      {
+        "NodeName": "IN-RajendraVM",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "Rajendra INGRNET domain VM"
+      },
+      {
+        "NodeName": "IN-ARCHITECT1",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "EA license server"
+      }
+    ]
   },
   {
-    "Owner": "Satyasridevi Seemakurthi",
-    "MachineNames": [ "invmocp1", "invmocp2", "invmocp3", "invmocp4", "invmocp5", "invmocp6", "invmocp7", "invmocp8", "invmocp9" ]
+    "Owner": "SEEMAKURTHI Satyasridevi",
+    "MachineNames": [
+      {
+        "NodeName": "invmocp1",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Develop/maintain OnCall (Dispatch, Records, OIE, MFR and AutoDispatch) ATPs.   SW: Playwright, k6, nodejs, npm packages.  Config is in-line with OCD client spec."
+      },
+      {
+        "NodeName": "invmocp2",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Develop/maintain OnCall (Dispatch, Records, OIE, MFR and AutoDispatch) ATPs.   SW: Playwright, k6, nodejs, npm packages.  Config is in-line with OCD client spec."
+      },
+      {
+        "NodeName": "invmocp3",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Develop/maintain OnCall (Dispatch, Records, OIE, MFR and AutoDispatch) ATPs.   SW: Playwright, k6, nodejs, npm packages.  Config is in-line with OCD client spec."
+      },
+      {
+        "NodeName": "invmocp4",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Develop/maintain OnCall (Dispatch, Records, OIE, MFR and AutoDispatch) ATPs.   SW: Playwright, k6, nodejs, npm packages.  Config is in-line with OCD client spec."
+      },
+      {
+        "NodeName": "invmocp5",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Develop/maintain OnCall (Dispatch, Records, OIE, MFR and AutoDispatch) ATPs.   SW: Playwright, k6, nodejs, npm packages.  Config is in-line with OCD client spec."
+      },
+      {
+        "NodeName": "invmocp6",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Develop/maintain OnCall (Dispatch, Records, OIE, MFR and AutoDispatch) ATPs.   SW: Playwright, k6, nodejs, npm packages.  Config is in-line with OCD client spec."
+      },
+      {
+        "NodeName": "invmocp7",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Develop/maintain OnCall (Dispatch, Records, OIE, MFR and AutoDispatch) ATPs.   SW: Playwright, k6, nodejs, npm packages.  Config is in-line with OCD client spec."
+      },
+      {
+        "NodeName": "invmocp8",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Develop/maintain OnCall (Dispatch, Records, OIE, MFR and AutoDispatch) ATPs.   SW: Playwright, k6, nodejs, npm packages.  Config is in-line with OCD client spec."
+      },
+      {
+        "NodeName": "invmocp9",
+        "HostName": "IN-PERFLAB",
+        "Purpose": "Develop/maintain OnCall (Dispatch, Records, OIE, MFR and AutoDispatch) ATPs.   SW: Playwright, k6, nodejs, npm packages.  Config is in-line with OCD client spec."
+      }
+    ]
   },
   {
-    "Owner": "Suresh Samudrala",
-    "MachineNames": [ "IN-CAPEREDIS", "in-CapePerfVM01", "IN-CAPEOnCalDev" ]
+    "Owner": "SAMUDRALA Suresh",
+    "MachineNames": [
+      {
+        "NodeName": "IN-CAPEREDIS",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "9.4 Oncall Testing/Dev"
+      },
+      {
+        "NodeName": "in-CapePerfVM01",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "CAD9.4 performance system"
+      },
+      {
+        "NodeName": "IN-CAPEOnCalDev",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "Oncall 9.4 dev system"
+      }
+    ]
   },
   {
-    "Owner": "Sudhir Prasad",
-    "MachineNames": [ "IN-CAPEW10GER", "IN-CAPEW11VM02", "IN-CAPEW12VM02", "IN-CAPEW19VM01", "IN-CAPEW19VM04", "IN-NDNVATP", "INSGICAD934SQL", "IN-CAPEW10VM05", "IN-CAPEW16VM04", "IN-CAPEW16VM05", "IN-CAPEW19VM03", "IN-CAPEW22VM01", "IN-NDNVATP1", "INSGICAD94SDB", "IN-CAPEW10VM01", "IN-CAPEW10VM02", "IN-CAPEW10VM04", "IN-CAPEW10VM06", "IN-CAPEW11VM01", "IN-CAPEW12VM01", "IN-CAPEW16ORDB", "IN-CAPEW16ORDB2", "IN-CAPEW16VM01", "IN-CAPEW16VM02", "IN-CAPEW16VM03", "IN-CAPEW19VM02", "IN-CAPEW22VM02", "IN-IPSND1" ]
+    "Owner": "PRASAD Sudhir K",
+    "MachineNames": [
+      {
+        "NodeName": "IN-CAPEW10GER",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with German OS"
+      },
+      {
+        "NodeName": "IN-CAPEW11VM02",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-CAPEW12VM02",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "CAD 9.3 QA System"
+      },
+      {
+        "NodeName": "IN-CAPEW19VM01",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-CAPEW19VM04",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-NDNVATP",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "CAD 9.3 DB system"
+      },
+      {
+        "NodeName": "INSGICAD934SQL",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "CAD 9.3 QA system"
+      },
+      {
+        "NodeName": "IN-CAPEW10VM05",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-CAPEW16VM04",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "CAD 9.3 QA System"
+      },
+      {
+        "NodeName": "IN-CAPEW16VM05",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-CAPEW19VM03",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-CAPEW22VM01",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "CAD 9.4 DB System for SQL Server 2022"
+      },
+      {
+        "NodeName": "IN-NDNVATP1",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "CAD 9.3 ATP system"
+      },
+      {
+        "NodeName": "INSGICAD94SDB",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "IME Database system"
+      },
+      {
+        "NodeName": "IN-CAPEW10VM01",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD ArcGIS QA System"
+      },
+      {
+        "NodeName": "IN-CAPEW10VM02",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 Security Patch system"
+      },
+      {
+        "NodeName": "IN-CAPEW10VM04",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-CAPEW10VM06",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-CAPEW11VM01",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-CAPEW12VM01",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.3 DB System"
+      },
+      {
+        "NodeName": "IN-CAPEW16ORDB",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 DB System for Oracle 19c"
+      },
+      {
+        "NodeName": "IN-CAPEW16ORDB2",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 DB System for oracle 12c"
+      },
+      {
+        "NodeName": "IN-CAPEW16VM01",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD ArcGIS/OnCall Server System"
+      },
+      {
+        "NodeName": "IN-CAPEW16VM02",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 DB System for SQL Server 2012"
+      },
+      {
+        "NodeName": "IN-CAPEW16VM03",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 Security Patch system"
+      },
+      {
+        "NodeName": "IN-CAPEW19VM02",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 DB System For SQL Server 2019"
+      },
+      {
+        "NodeName": "IN-CAPEW22VM02",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 QA System with is used for testing 13 CAD9.4 Version with different product combinations"
+      },
+      {
+        "NodeName": "IN-IPSND1",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "CAD 9.4 ATP system"
+      }
+    ]
   },
   {
-    "Owner": "Kadiri Nirmala Jyothirmai",
-    "MachineNames": [ "IN-COREOMS", "IN-HSIHAMONGO1", "IN-HSIHAMONGO2", "IN-HSIOMS02", "IN-MRDEV1", "IN-OMAONPREM", "IN-OMS", "IN-LBTEST", "IN-MR94", "IN-MRQA94" ]
+    "Owner": "KADIRI Nirmala Jyothirmai",
+    "MachineNames": [
+      {
+        "NodeName": "IN-COREOMS",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "OMS QA VM"
+      },
+      {
+        "NodeName": "IN-HSIHAMONGO1",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "OMS QA VM for testing previous version"
+      },
+      {
+        "NodeName": "IN-HSIHAMONGO2",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "OMS QA VM for testing previous version"
+      },
+      {
+        "NodeName": "IN-HSIOMS02",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "OMS DEV VM"
+      },
+      {
+        "NodeName": "IN-MRDEV1",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "MR 93 DEV VM"
+      },
+      {
+        "NodeName": "IN-OMAONPREM",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "OMS Build Machine"
+      },
+      {
+        "NodeName": "IN-OMS",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "OMS QA VM for testing latest version"
+      },
+      {
+        "NodeName": "IN-LBTEST",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "For Testing Load Balancer"
+      },
+      {
+        "NodeName": "IN-MR94",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "MR 94 QA VM"
+      },
+      {
+        "NodeName": "IN-MRQA94",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "MR 94 ReWrite QA VM and Build Machine "
+      }
+    ]
   },
   {
-    "Owner": "Ravi Arepalli",
-    "MachineNames": [ "INHSICTVM03", "INHSICTVM01" ]
+    "Owner": "AREPALLI Ravi Babu",
+    "MachineNames": [
+      {
+        "NodeName": "INHSICTVM03",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "2209 Environment  with MOI DB"
+      },
+      {
+        "NodeName": "INHSICTVM01",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "Latest OnCall 2403 AppServer for Ravenclaws team Dev"
+      }
+    ]
   },
   {
-    "Owner": "Sanjeev Lade",
-    "MachineNames": [ "INHSIOMS02", "IN-HSIOMS2303", "INHSIOMS03", "INHSIOMSDEV01", "IN-QAOMS", "ONPREMONCALL1", "ONPREMONCALL2" ]
+    "Owner": "LADE Sanjeev R",
+    "MachineNames": [
+      {
+        "NodeName": "INHSIOMS02",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "OMS DEV VM"
+      },
+      {
+        "NodeName": "IN-HSIOMS2303",
+        "HostName": "IN-HYD-HSISRV8.ingrnet.com",
+        "Purpose": "OMS Pipleline Deployment"
+      },
+      {
+        "NodeName": "INHSIOMS03",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OMS Pipleline Deployment"
+      },
+      {
+        "NodeName": "INHSIOMSDEV01",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OMS DEV VM"
+      },
+      {
+        "NodeName": "IN-QAOMS",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OMS Pipleline Deployment"
+      },
+      {
+        "NodeName": "ONPREMONCALL1",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall Dispatch for Mobile Team"
+      },
+      {
+        "NodeName": "ONPREMONCALL2",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall Dispatch for Mobile Team"
+      }
+    ]
   },
   {
-    "Owner": "Naveen Dubasi",
-    "MachineNames": [ "INHSIUBUNTU01" ]
+    "Owner": "DUBASI Naveen",
+    "MachineNames": [
+      {
+        "NodeName": "INHSIUBUNTU01",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Hosted Nominatim server to communicate with OnCall Location verification API to get Geometries"
+      }
+    ]
   },
   {
-    "Owner": "Sukumar Balaji",
-    "MachineNames": [ "INHSIVM18" ]
+    "Owner": "SUKUMAR Balaji T",
+    "MachineNames": [
+      {
+        "NodeName": "INHSIVM18",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "OnCall 2303 Application Server -  QA"
+      }
+    ]
   },
   {
-    "Owner": "Chandra Viyyapu",
-    "MachineNames": [ "IN-MISFITSCAD92", "IN-WRAPPVM01", "IN-WRAPPVM36", "IN-M16CAD91EF64", "IN-M19CAD93EF63", "IN-M19CAD93EF64", "IN-M19CAD94EF64", "IN-M19CAD94EF64", "IN-MISFITSCAD94" ]
+    "Owner": "VIYYAPU Chandra S",
+    "MachineNames": [
+      {
+        "NodeName": "IN-MISFITSCAD92",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Development machine for AS3.0"
+      },
+      {
+        "NodeName": "IN-WRAPPVM01",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Used to deploy Link and connect versions"
+      },
+      {
+        "NodeName": "IN-WRAPPVM36",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "Used to deploy Link and connect versions"
+      },
+      {
+        "NodeName": "IN-M16CAD91EF64",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "used to deploy Link and connect versions"
+      },
+      {
+        "NodeName": "IN-M19CAD93EF63",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "On-premise build that are delievered"
+      },
+      {
+        "NodeName": "IN-M19CAD93EF64",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "used to deploy Link and connect versions"
+      },
+      {
+        "NodeName": "IN-M19CAD94EF64",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "used to deploy Link and connect versions"
+      },
+      {
+        "NodeName": "IN-M19CAD94EF64",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "used to deploy Link and connect versions"
+      },
+      {
+        "NodeName": "IN-MISFITSCAD94",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "earlier used to deploy Link and connect versions"
+      }
+    ]
   },
   {
-    "Owner": "Manohar Rudra",
-    "MachineNames": [ "IN-PSBuildime15", "IN-IPSND3" ]
+    "Owner": "RUDRA Manohar",
+    "MachineNames": [
+      {
+        "NodeName": "IN-PSBuildime15",
+        "HostName": "IN-HYD-HSISRV3.ingrnet.com",
+        "Purpose": "CAD 9.4 Build system"
+      },
+      {
+        "NodeName": "IN-IPSND3",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "Local Build system"
+      }
+    ]
   },
   {
-    "Owner": "Shiva Krishnamurti",
-    "MachineNames": [ "IN-GTQAW11VM1", "IN-GTQAWIN22VM1", "IN-GTQAWIN22VM2", "IN-NWRELTEST", "IN-GTQADBVM01", "IN-GTQADBVM02", "IN-GTQADBVM03", "IN-GTQAW10VM1", "IN-GTQAW10VM3", "IN-GTQAW11VM2", "IN-GTQAW11VM3", "IN-GTQAWIN16FR", "IN-GTQAWIN19VM3", "IN-GTSTBNVSVM1", "ININSQASRVVM20", "IN-GTQADBVM04", "IN-NW20WIN2K16", "IN-NWBLDAGNT", "IN-NWORA19DBVM1", "IN-NWORA19DBVM2", "IN-NWQASP20SRVM", "IN-NWQAW19VM1", "IN-NWQAW19VM3", "IN-NWQAWIN22VM1", "IN-NWRGSDB", "IN-NWMWIN22VM1", "IN-SADBSRV4" ]
+    "Owner": "KRISHNAMURTI Shiva Kumar",
+    "MachineNames": [
+      {
+        "NodeName": "IN-GTQAW11VM1",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "GT Regression Testing"
+      },
+      {
+        "NodeName": "IN-GTQAWIN22VM1",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "Export 64bit testing"
+      },
+      {
+        "NodeName": "IN-GTQAWIN22VM2",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "Export 64bit testing"
+      },
+      {
+        "NodeName": "IN-NWRELTEST",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "NW  build machine"
+      },
+      {
+        "NodeName": "IN-GTQADBVM01",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "GT 10.04 Database Server - Oracle 12c"
+      },
+      {
+        "NodeName": "IN-GTQADBVM02",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "GT 11.01 Database Server - Oracle 12c"
+      },
+      {
+        "NodeName": "IN-GTQADBVM03",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "GT 11.01 Database Server - Oracle 19c"
+      },
+      {
+        "NodeName": "IN-GTQAW10VM1",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "GT Regression Testing"
+      },
+      {
+        "NodeName": "IN-GTQAW10VM3",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "GT Regression Testing, Playwright "
+      },
+      {
+        "NodeName": "IN-GTQAW11VM2",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Stab machine - NV client"
+      },
+      {
+        "NodeName": "IN-GTQAW11VM3",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Stab machine - Field Review"
+      },
+      {
+        "NodeName": "IN-GTQAWIN16FR",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "French Locale"
+      },
+      {
+        "NodeName": "IN-GTQAWIN19VM3",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "NetExport Classic"
+      },
+      {
+        "NodeName": "IN-GTSTBNVSVM1",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Stab machine - NV Server"
+      },
+      {
+        "NodeName": "ININSQASRVVM20",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "DEV/TEST DB:\u00A0IWMUTEST,\u00A0COMMPROD, SMUD"
+      },
+      {
+        "NodeName": "IN-GTQADBVM04",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "GT 11.01 Database Server - Oracle 19c"
+      },
+      {
+        "NodeName": "IN-NW20WIN2K16",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "NetWorks Master DB"
+      },
+      {
+        "NodeName": "IN-NWBLDAGNT",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "NW 2.0 build machine"
+      },
+      {
+        "NodeName": "IN-NWORA19DBVM1",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "NetWorks DB Server"
+      },
+      {
+        "NodeName": "IN-NWORA19DBVM2",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "NetWorks DB Server"
+      },
+      {
+        "NodeName": "IN-NWQASP20SRVM",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Security Patch Server"
+      },
+      {
+        "NodeName": "IN-NWQAW19VM1",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Regression Testing"
+      },
+      {
+        "NodeName": "IN-NWQAW19VM3",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Regression Testing"
+      },
+      {
+        "NodeName": "IN-NWQAWIN22VM1",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Regression Testing"
+      },
+      {
+        "NodeName": "IN-NWRGSDB",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Master DB"
+      },
+      {
+        "NodeName": "IN-NWMWIN22VM1",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "CoreMobile Admin Server"
+      },
+      {
+        "NodeName": "IN-SADBSRV4",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Development DB  IWMUTEST, COMMPROD, SMUD"
+      }
+    ]
   },
   {
-    "Owner": "Chethan Srikrishna",
-    "MachineNames": [ "IN-HSI1433VM01" ]
+    "Owner": "SRIKRISHNA Chethan",
+    "MachineNames": [
+      {
+        "NodeName": "IN-HSI1433VM01",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "Research activities involving automation, containerization in INGRNET network"
+      }
+    ]
   },
   {
-    "Owner": "Dineshkumar Mahadevan",
-    "MachineNames": [ "IN-IPRSRVTEST", "INHSIVM19" ]
+    "Owner": "MAHADEVAN Dineshkumar",
+    "MachineNames": [
+      {
+        "NodeName": "IN-IPRSRVTEST",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "OnCall Planning and Response (OPR) product server. Connot be combined and 8GB RAM required."
+      },
+      {
+        "NodeName": "INHSIVM19",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "OnCall Dev/QA Dispatch application Server - Blue Falcon team."
+      }
+    ]
   },
   {
-    "Owner": "Rajya Lakshmi Vulava",
-    "MachineNames": [ "INPSBuildIME165" ]
+    "Owner": "VULAVA Rajya Lakshmi (Raji)",
+    "MachineNames": [
+      {
+        "NodeName": "INPSBuildIME165",
+        "HostName": "IN-HYD-HSISRV5.ingrnet.com",
+        "Purpose": "IME build machine"
+      }
+    ]
   },
   {
-    "Owner": "Pramod Valipireddy",
-    "MachineNames": [ "IN-ERDDEVVM01", "IN-HGD-AG2", "IN-HGD-DEV", "IN-HGDIXMASTER", "IN-HGDJMASTER", "IN-HGD-JMASTER", "IN-HGD-MATP14", "IN-HGD-MATP2", "IN-HGD-MATP5", "IN-HGD-MATP6", "IN-HGD-MATP9", "IN-HGD-POSTGIS", "IN-HGD-RATP1", "IN-HGD-SERV2019", "IN-HGD-SMO", "IN-HGD-SMSDK", "IN-HGD-SQLDB", "IN-HGD-TIER1", "IN-HGD-TSRV2019", "IN-HGD-DP2", "IN-HGD-MAPPX", "IN-HGD-SRV2022" ]
+    "Owner": "VALIPIREDDY Pramod K",
+    "MachineNames": [
+      {
+        "NodeName": "IN-ERDDEVVM01",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automatic Builds download from Azure"
+      },
+      {
+        "NodeName": "IN-HGD-AG2",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Execution of automated tests for checking installer health and also has multiple previous older versions of the product to check any bugs"
+      },
+      {
+        "NodeName": "IN-HGD-DEV",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests development (Visual Studio)"
+      },
+      {
+        "NodeName": "IN-HGDIXMASTER",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Jenkins master"
+      },
+      {
+        "NodeName": "IN-HGDJMASTER",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Jenkins master"
+      },
+      {
+        "NodeName": "IN-HGD-JMASTER",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Jenkins master"
+      },
+      {
+        "NodeName": "IN-HGD-MATP14",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests execution"
+      },
+      {
+        "NodeName": "IN-HGD-MATP2",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests development (Visual Studio)"
+      },
+      {
+        "NodeName": "IN-HGD-MATP5",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests development (Visual Studio)"
+      },
+      {
+        "NodeName": "IN-HGD-MATP6",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests execution"
+      },
+      {
+        "NodeName": "IN-HGD-MATP9",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests development (Visual Studio)"
+      },
+      {
+        "NodeName": "IN-HGD-POSTGIS",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "PostGIS DB and Symantec Anti-Virus (for scanning installer deliverables)"
+      },
+      {
+        "NodeName": "IN-HGD-RATP1",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests execution"
+      },
+      {
+        "NodeName": "IN-HGD-SERV2019",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests execution"
+      },
+      {
+        "NodeName": "IN-HGD-SMO",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests execution"
+      },
+      {
+        "NodeName": "IN-HGD-SMSDK",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "SMSDK automated tests execution"
+      },
+      {
+        "NodeName": "IN-HGD-SQLDB",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "SQL DB"
+      },
+      {
+        "NodeName": "IN-HGD-TIER1",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Execution of automated tests for checking installer health "
+      },
+      {
+        "NodeName": "IN-HGD-TSRV2019",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "Automated tests execution"
+      },
+      {
+        "NodeName": "IN-HGD-DP2",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "Geoserver installation"
+      },
+      {
+        "NodeName": "IN-HGD-MAPPX",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "Autoamted tests execution"
+      },
+      {
+        "NodeName": "IN-HGD-SRV2022",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "M.App X and Luciad Fusion server"
+      }
+    ]
   },
   {
-    "Owner": "Rajesh Puducheri",
-    "MachineNames": [ "in-indspvm01", "IN-INDSPVM06", "IN-INDSPVM07", "IN-INDSPVM12", "IN-INSQASRVVM12", "IN-INSQASRVVM28", "ININSQASRVVM31", "ININSQASRVVM36" ]
+    "Owner": "PUDUCHERI Rajesh",
+    "MachineNames": [
+      {
+        "NodeName": "in-indspvm01",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "9.2 DEV SYSTEM"
+      },
+      {
+        "NodeName": "IN-INDSPVM06",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "9.3 DEV SYSTEM"
+      },
+      {
+        "NodeName": "IN-INDSPVM07",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "9.4 DEV SYSTEM"
+      },
+      {
+        "NodeName": "IN-INDSPVM12",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "OnCALL SETup system"
+      },
+      {
+        "NodeName": "IN-INSQASRVVM12",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "SQL Server 9.4 DB"
+      },
+      {
+        "NodeName": "IN-INSQASRVVM28",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "9.4 QA Release machine"
+      },
+      {
+        "NodeName": "ININSQASRVVM31",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "9.4 QA for Automation"
+      },
+      {
+        "NodeName": "ININSQASRVVM36",
+        "HostName": "IN-HYD-HSISRV6.ingrnet.com",
+        "Purpose": "ONCOR DB SYsTEM"
+      }
+    ]
   },
   {
-    "Owner": "Rajesh Chalamalasetty",
-    "MachineNames": [ "INHSI-RMS2019" ]
+    "Owner": "CHALAMALASETTY Rajesh V",
+    "MachineNames": [
+      {
+        "NodeName": "INHSI-RMS2019",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "FTS 2310 Testing"
+      }
+    ]
   },
   {
-    "Owner": "Suryam Garimella",
-    "MachineNames": [ "INHSIVM04" ]
+    "Owner": "GARIMELLA Suryam V",
+    "MachineNames": [
+      {
+        "NodeName": "INHSIVM04",
+        "HostName": "IN-HYD-HSISRV7.ingrnet.com",
+        "Purpose": "2403 OnCall Dispatch Server Dev"
+      }
+    ]
   },
   {
-    "Owner": "Akhilesh Patra",
-    "MachineNames": [ "INHSIONCALLVM06", "INHSIONCALLVM07", "INHSIONCALLVM09", "INHSIONCALLVM25" ]
+    "Owner": "PATRA Akhilesh",
+    "MachineNames": [
+      {
+        "NodeName": "INHSIONCALLVM06",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall Dispatch -Operational Reports SQL Server - for StrawHats team"
+      },
+      {
+        "NodeName": "INHSIONCALLVM07",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall Dispatch -Operational Reports Oracle - for StrawHats team"
+      },
+      {
+        "NodeName": "INHSIONCALLVM09",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall Dispatch - Chat Server - for StrawHats team"
+      },
+      {
+        "NodeName": "INHSIONCALLVM25",
+        "HostName": "IN-HYD-HSISRV9.ingrnet.com",
+        "Purpose": "OnCall 2309 Dispatch Server for StrawHats team"
+      }
+    ]
   }
 ]

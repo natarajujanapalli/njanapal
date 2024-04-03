@@ -8,6 +8,8 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.ServiceProcess;
+using System.Globalization;
 
 namespace njanapal
 {
@@ -24,13 +26,18 @@ namespace njanapal
                 text = File.ReadAllText(filePath);
 
             //var machine = JsonSerializer.Deserialize<ObservableCollection<Machine>>(text); //.Deserialize<Machine>(text);
-            var machines = JsonSerializer.Deserialize<ObservableCollection<UserMachines>>(text); //.Deserialize<Machine>(text);
+            var _userMachines = JsonSerializer.Deserialize<ObservableCollection<UserMachines>>(text); //.Deserialize<Machine>(text);
 
-            foreach(var u in machines)
+            foreach (var _um in _userMachines)
             {
-                foreach (var m in u.MachineNames)
-                    data.Add(new Machine { MachineName = m, Owner = u.Owner });
+                foreach (var m in _um.MachineNames)
+                {
+                    var vm = new Machine { MachineName = m.NodeName.ToUpper(), HostName = m.HostName, Owner = _um.Owner, Purpose = m.Purpose };
+                    data.Add(vm);
+                }
             }
+
+            _userMachines.Clear();
 
             return data;
         }
@@ -214,5 +221,73 @@ namespace njanapal
             return (Caption, Version, OSArchitecture, LastBootUpTime, Organization, NumberOfUsers);
         }
 
+        public string GetRegistryScript(ObservableCollection<string> machines)
+        {
+            if (machines == null || machines.Count == 0)
+                return string.Empty;
+
+            StringBuilder sb = new StringBuilder();
+            List<string> scriptList = new List<string>();
+
+            int maxLength = 0;
+            string template = $"";
+            foreach (var m in machines.OrderBy(r => r))
+            {
+                //if (CheckServiceStartModeAutomaticManual(m) == false)
+                //    scriptList.Add($"SC \\\\{m} config RemoteRegistry start= auto");
+                //
+                //if (CheckServiceStatusRunning(m) == false)
+                //    scriptList.Add($"SC \\\\{m} start RemoteRegistry");
+
+                var temp = $"REG QUERY \"\\\\{m}\\HKLM\\SOFTWARE\\Microsoft\\Virtual Machine\\Guest\\Parameters\"";
+                scriptList.Add(temp);
+
+                if (temp.Length > maxLength)
+                    maxLength = temp.Length;
+            }
+
+            foreach(var r in scriptList)
+            {
+                //sb.AppendLine($"{r.PadRight(maxLength, ' ')} /s /f PhysicalHostNameFullyQualified");
+                sb.AppendLine($"{r.PadRight(maxLength, ' ')} /s /f Name");
+            }
+
+            return sb.ToString();
+        }
+
+        //public bool CheckServiceStartModeAutomaticManual(string machineName)
+        //{
+        //    try
+        //    {
+        //        ServiceController sc = new ServiceController("RemoteRegistry", machineName);
+        //
+        //        if (sc.StartType != ServiceStartMode.Automatic && sc.StartType != ServiceStartMode.Manual)
+        //            return false;
+        //    }
+        //    catch
+        //    {
+        //
+        //    }
+        //
+        //    return true;
+        //}
+        //
+        //public bool CheckServiceStatusRunning(string machineName)
+        //{
+        //    try
+        //    {
+        //        ServiceController sc = new ServiceController("RemoteRegistry", machineName);
+        //
+        //        if (sc.Status.Equals(ServiceControllerStatus.Stopped) || sc.Status.Equals(ServiceControllerStatus.StopPending))
+        //            return false;
+        //    }
+        //    catch
+        //    {
+        //
+        //    }
+        //
+        //    return true;
+        //
+        //}
     }
 }

@@ -127,7 +127,8 @@ namespace njanapal
                     ManagementObject classInstance = new ManagementObject(scope, path, null);
                     ManagementBaseObject outParams = classInstance.InvokeMethod("GetOwner", null, null);
 
-                    users.Add(outParams["User"].ToString());
+                    if (!users.Contains(outParams["User"].ToString()))
+                        users.Add(outParams["User"].ToString());
                 }
 
                 usersDetails = GetQUserInfo(remoteComputerNodeName);
