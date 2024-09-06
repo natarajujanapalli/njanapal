@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -128,7 +130,15 @@ namespace njanapal
                     ManagementBaseObject outParams = classInstance.InvokeMethod("GetOwner", null, null);
 
                     if (!users.Contains(outParams["User"].ToString()))
-                        users.Add(outParams["User"].ToString());
+                    {
+                        users.Add($"{outParams["User"].ToString()}");
+
+                        //var temp = GetUserDisplayName(outParams["User"].ToString());
+                        //if (string.IsNullOrWhiteSpace(temp))
+                        //    users.Add($"{outParams["User"].ToString()}");
+                        //else
+                        //    users.Add($"{outParams["User"].ToString()} ({temp})");
+                    }
                 }
 
                 usersDetails = GetQUserInfo(remoteComputerNodeName);
@@ -225,9 +235,66 @@ namespace njanapal
         }
 
 
+        // Remote Shutdown
+
+        public bool RemoteShutdown(string userName, string password, string ip)
+        {
+            try
+            {
+                ConnectionOptions op = new ConnectionOptions();
+                op.Username = userName;
+                op.Password = password;
+                // Make a connection to a remote computer.  
+                ManagementScope scope = new ManagementScope("\\\\" + ip + "\\root\\cimv2", op);
+                scope.Connect();
+                //Query system for Operating System information  
+                ObjectQuery oq = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
+                ManagementObjectSearcher query = new ManagementObjectSearcher(scope, oq);
+                ManagementObjectCollection queryCollection = query.Get();
+                foreach (ManagementObject obj in queryCollection)
+                {
+                    obj.InvokeMethod("ShutDown", null); //shutdown  
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        // Remote Reboot
+        public bool Reboot(string userName, string password, string ip)
+        {
+            try
+            {
+                ConnectionOptions op = new ConnectionOptions();
+                //op.Username = userName;
+                //op.Password = password;
+                // Make a connection to a remote computer.  
+                ManagementScope scope = new ManagementScope("\\\\" + ip + "\\root\\cimv2", op);
+                scope.Connect();
+
+                //Query system for Operating System information  
+                ObjectQuery oq = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
+
+                ManagementObjectSearcher query = new ManagementObjectSearcher(scope, oq);
+                ManagementObjectCollection queryCollection = query.Get();
+                foreach (ManagementObject obj in queryCollection)
+                {
+                    obj.InvokeMethod("Reboot", null); //shutdown  
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
 
-  
 
     }
 

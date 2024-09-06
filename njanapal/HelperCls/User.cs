@@ -10,6 +10,7 @@ namespace njanapal
     {
         public string MachineName { get; set; }
         public string UserName { get; set; }
+        public string DisplayName { get; set; }
         public string SessionName { get; set; }
         public string Id { get; set; }
         public string State { get; set; }

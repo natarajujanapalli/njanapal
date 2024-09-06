@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.ServiceProcess;
 using System.Globalization;
+using System.DirectoryServices.AccountManagement;
 
 namespace njanapal
 {
@@ -289,5 +290,60 @@ namespace njanapal
         //    return true;
         //
         //}
+
+        public string GetUserDisplayName(string username)
+        {
+            using (PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "INGRNET.com"))
+            {
+                //username = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                using (UserPrincipal user = UserPrincipal.FindByIdentity(ctx, username))
+                {
+                    if (user != null)
+                    {
+                        return user.DisplayName;
+                    }
+                }
+            }
+
+            return string.Empty;
+
+            //using (var root = new DirectoryEntry($"LDAP://ingrnet.com"))
+            //{
+            //    using (var searcher = new DirectorySearcher(root))
+            //    {
+            //        // looking for a specific user
+            //        searcher.Filter = $"(&(objectCategory=person)(objectClass=user)(sAMAccountName={username}))";
+            //        // I only care about what groups the user is a memberOf
+            //        searcher.PropertiesToLoad.Add("memberOf");
+            //
+            //        // FYI, non-null results means the user was found
+            //        var results = searcher.FindOne();
+            //
+            //        var properties = results?.Properties;
+            //        if (properties?.Contains("memberOf") == true)
+            //        {
+            //            // ... iterate over all the groups the user is a member of
+            //        }
+            //    }
+            //}
+
+            //using (var context = new PrincipalContext(ContextType.Domain, "INGRNET.com"))
+            //{
+            //    using (var searcher = new PrincipalSearcher(new UserPrincipal(context)))
+            //    {
+            //        foreach (var result in searcher.FindAll())
+            //        {
+            //            DirectoryEntry de = result.GetUnderlyingObject() as DirectoryEntry;
+            //            Console.WriteLine("First Name: " + de.Properties["givenName"].Value);
+            //            Console.WriteLine("Last Name : " + de.Properties["sn"].Value);
+            //            Console.WriteLine("SAM account name   : " + de.Properties["samAccountName"].Value);
+            //            Console.WriteLine("User principal name: " + de.Properties["userPrincipalName"].Value);
+            //            Console.WriteLine();
+            //        }
+            //    }
+            //}
+            //Console.ReadLine();
+        }
+
     }
 }

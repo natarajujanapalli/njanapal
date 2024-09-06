@@ -92,13 +92,19 @@
                 <TabControl Grid.Column="2" Margin="0,0,0,-2" Name="mainTabControl" SelectedIndex="0" BorderThickness="0" >
                     <TabItem Header="Machines" Name="MachinesTabItem" IsSelected="True" Style="{DynamicResource CommonTabItem}">
 
-                        <DataGrid Grid.Column="2" Margin="2,10,0,0" ItemsSource="{Binding VirtualMachines}" SelectedItem="{Binding SelectedRemoteVirtualMachine}"
+                        <DataGrid Grid.Column="2" Margin="2,10,0,0" ItemsSource="{Binding VirtualMachines}" SelectedItem="{Binding SelectedVirtualMachine}"
                               BorderBrush="Black" BorderThickness="1" ScrollViewer.CanContentScroll="True" 
                               AutoGenerateColumns="False" CanUserAddRows="False" Background="Transparent"
                               HeadersVisibility="Column" RowHeight="20" Grid.ColumnSpan="3">
                             <DataGrid.Resources>
                                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightSkyBlue"/>
                             </DataGrid.Resources>
+
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Reboot" Command="{Binding RebootCommand}" IsEnabled="{Binding IsRebootEnable}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
 
                             <DataGrid.Columns>
 
@@ -358,7 +364,8 @@
                                     </DataGridTemplateColumn.Header>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox Text="{Binding UserName}" VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="0" Background="Transparent"  IsReadOnly="True"/>
+                                            <TextBox Text="{Binding UserName}" ToolTip="{Binding DisplayName}"
+                                                     VerticalContentAlignment="Center" BorderThickness="0" BorderBrush="Transparent" Margin="0" Background="Transparent"  IsReadOnly="True"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

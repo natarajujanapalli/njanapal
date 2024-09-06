@@ -35,6 +35,14 @@ namespace SignedInUsers
             }
         }
 
+        private bool _isRebootEnable = false;
+        public bool IsRebootEnable
+        {
+            get { return _isRebootEnable; }
+            set { _isRebootEnable = value; RaisePropertyChanged("IsRebootEnable"); }
+        }
+
+
         private bool _enableLoad;
         public bool EnableLoadBtn
         {
@@ -108,11 +116,11 @@ namespace SignedInUsers
             set { _remoteVirtualMachines = value; RaisePropertyChanged("VirtualMachines"); }
         }
 
-        private RemoteMachineUser _selectedRemoteVirtualMachine;
-        public RemoteMachineUser SelectedRemoteVirtualMachine
+        private Machine _selectedVirtualMachine;
+        public Machine SelectedVirtualMachine
         {
-            get { return _selectedRemoteVirtualMachine; }
-            set { _selectedRemoteVirtualMachine = value; RaisePropertyChanged("SelectedRemoteVirtualMachine"); }
+            get { return _selectedVirtualMachine; }
+            set { _selectedVirtualMachine = value; RaisePropertyChanged("SelectedVirtualMachine"); }
         }
 
         private ObservableCollection<User> _users;
@@ -149,6 +157,7 @@ namespace SignedInUsers
         public RelayCommand RemoveAllCommand { get; set; }
         public RelayCommand SignOffCommand { get; set; }
         public RelayCommand ExportExcelCommand { get; set; }
+        public RelayCommand RebootCommand { get; set; }
 
 
 
@@ -174,6 +183,7 @@ namespace SignedInUsers
             RemoveAllCommand = new RelayCommand(RemoveAll);
             SignOffCommand = new RelayCommand(SignOff);
             ExportExcelCommand = new RelayCommand(ExportExcel);
+            RebootCommand = new RelayCommand(Reboot);
 
             //FilePath = $"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RemoteMachines.txt")}";
 
@@ -292,6 +302,8 @@ namespace SignedInUsers
                 this.Status = $"Time Taken: {hrs} : {mins} : {secs} : {millisecs} to process all machines.";
 
                 Statuses.AppendLine(this.Status);
+
+                IsRebootEnable = VirtualMachines.Count > 0;
             }
             catch (Exception ex)
             {
@@ -345,6 +357,8 @@ namespace SignedInUsers
 
                 this.Status = $"Time Taken: {hrs} : {mins} : {secs} : {millisecs} to process: '{SelectedMachine}'.";
                 Statuses.AppendLine(this.Status);
+
+                IsRebootEnable = VirtualMachines.Count > 0;
             }
             catch (Exception ex)
             {
@@ -403,7 +417,6 @@ namespace SignedInUsers
                         var userDetails = usersDetails?.Where(r => r.UserName.ToLower().Equals(user.ToLower())).FirstOrDefault();
                         if (userDetails == null)
                         {
-                            vmUser.MachineName = machine;
                             vmUser.UserName = user;
                             vmUser.SessionName = string.Empty;
                             vmUser.Id = string.Empty;
@@ -413,7 +426,6 @@ namespace SignedInUsers
                         }
                         else
                         {
-                            vmUser.MachineName = machine;
                             vmUser.UserName = userDetails.UserName;
                             vmUser.SessionName = userDetails.SessionName;
                             vmUser.Id = userDetails.Id;
@@ -422,6 +434,8 @@ namespace SignedInUsers
                             vmUser.LogonTime = userDetails.LogonTime;
                         }
 
+                        vmUser.MachineName = machine;
+                        vmUser.DisplayName = handler.GetUserDisplayName(user);
                         RemoteVirtualMachine.Users.Add(vmUser);
 
                     }
@@ -783,6 +797,11 @@ namespace SignedInUsers
             return dataTable;
         }
 
+        private void Reboot()
+        {
+            if (SelectedVirtualMachine != null && !string.IsNullOrEmpty(SelectedVirtualMachine.MachineName))
+                remote.Reboot("", "", SelectedVirtualMachine.MachineName);
+        }
 
         //public void ExecuteBatFile(string _batDir, string file)
         //{
