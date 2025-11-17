@@ -19,6 +19,8 @@ namespace SignedInUsers
     public class MainWindowViewModel : ViewModelBase
     {
 
+        private const string _ownersAll = "ALL";
+
         private bool _isEnable;
         public bool IsEnable
         {
@@ -85,6 +87,23 @@ namespace SignedInUsers
             set { _filePaths = value; RaisePropertyChanged("FilePaths"); }
         }
 
+        private ObservableCollection<string> _owners;
+
+        public ObservableCollection<string> Owners
+        {
+            get { return _owners; }
+            set { _owners = value; RaisePropertyChanged("Owners"); }
+        }
+
+        private string _ownerSelected;
+
+        public string OwnerSelected
+        {
+            get { return _ownerSelected; }
+            set { _ownerSelected = value; RaisePropertyChanged("OwnerSelected"); }
+        }
+
+        public ObservableCollection<MachineOwner> MachineOwnerList { get; set; }
 
         private ObservableCollection<string> _machines;
         public ObservableCollection<string> Machines
@@ -194,6 +213,7 @@ namespace SignedInUsers
 
             VirtualMachines = new ObservableCollection<Machine>();
             Users = new ObservableCollection<User>();
+            MachineOwnerList = new ObservableCollection<MachineOwner>();
 
             FilePaths = GetFilePaths();
 
@@ -236,6 +256,11 @@ namespace SignedInUsers
             this.VirtualMachines = new ObservableCollection<Machine>();
             this.Users = new ObservableCollection<User>();
 
+            ObservableCollection<string> ownerslist = new ObservableCollection<string>();
+
+            if (string.IsNullOrWhiteSpace(OwnerSelected)) 
+                ownerslist.Add(_ownersAll);
+
             try
             {
                 FilePaths = GetFilePaths();
@@ -244,16 +269,36 @@ namespace SignedInUsers
                 foreach (var vm in RemoteVirtualMachines.OrderBy(r => r.MachineName))
                 {
                     if (!string.IsNullOrWhiteSpace(vm.MachineName.ToUpper().Trim()) && !this.Machines.Contains(vm.MachineName.ToUpper().Trim()))
-                        this.Machines.Add(vm.MachineName.ToUpper().Trim());
+                    {
+                        var m = vm.MachineName.ToUpper().Trim();
+                        var o = vm.Owner.Trim();
+                        this.Machines.Add(m);
+                        ownerslist.Add(o);
+
+                        MachineOwnerList.Add(new MachineOwner { Machine = m, Owner = o });
+                    }
                 }
 
                 RegistryScript = handler.GetRegistryScript(this.Machines);
+
+                Owners = new ObservableCollection<string>(ownerslist.Distinct().OrderBy(r => r));
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Unable to Load File.");
             }
 
+        }
+
+        public void LoadMachinesByOwner ()
+        {
+            if(OwnerSelected == _ownersAll)
+            {
+                this.Machines = new ObservableCollection<string>(MachineOwnerList.Select(r => r.Machine));
+            }
+            else
+                this.Machines = new ObservableCollection<string>(MachineOwnerList.Where(r => r.Owner.Equals(OwnerSelected)).Select(r => r.Machine));
+            RegistryScript = handler.GetRegistryScript(this.Machines);
         }
 
         public StringBuilder Statuses = new StringBuilder();
@@ -817,5 +862,11 @@ namespace SignedInUsers
         //    int ExitCode = proc.ExitCode;
         //    proc.Close();
         //}
+    }
+
+    public class MachineOwner
+    {
+        public string Machine { get; set; }
+        public string Owner { get; set; }
     }
 }

@@ -33,28 +33,32 @@
         <Grid Margin="10,25,10,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="50*" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="100*" />
                     <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="100" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Content="Path :" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <Label Grid.Column="0" Content="Path :" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" />
                 <!--<TextBox Grid.Column="1" Margin="0,0,5,0" Height="30" TabIndex="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Text="{Binding FilePath}" />-->
-                <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="30" TabIndex="2" VerticalAlignment="Center" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" 
+                <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="30" TabIndex="1" VerticalAlignment="Center" 
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center" 
                           ItemsSource ="{Binding FilePaths}" 
                           SelectedValue ="{Binding FilePath}"
                           SelectionChanged="ComboBox_SelectionChanged"
                           IsEditable="True"
+                          GotFocus="ComboBox_GotFocus"
+                          IsEnabled="{Binding IsEnable}"
                           />
 
                 <Button Grid.Column="2" Margin="1,0,1,0" Width="98" Style="{DynamicResource RoundedButton}"
-                        TabIndex="1" Content="Browse" IsEnabled="{Binding IsEnable}"
+                        TabIndex="2" Content="Browse" IsEnabled="{Binding IsEnable}"
                         Command="{Binding BrowseCommand}" 
                         ToolTip="Click here to load the file which has all VMs."/>
 
@@ -66,9 +70,31 @@
 
             </Grid>
 
-            <!--<Border Grid.Row="1" Margin="0"  BorderBrush="Black"   BorderThickness="1" CornerRadius="2" >-->
+            <Grid Grid.Row="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="1">
+                <Label Grid.Column="0" Margin="0,-20,0,0" Content="Owner :" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center" />
+
+                <ComboBox Grid.Column="1" Margin="0,-20,5,0" Height="30" TabIndex="4" Name="ownerComboBox"
+                          VerticalAlignment="Center" 
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center" 
+                          ItemsSource ="{Binding Owners}" 
+                          SelectedValue ="{Binding OwnerSelected}"
+                          SelectionChanged="ownerComboBox_SelectionChanged"
+                          IsEditable="True"
+                          GotFocus="ownerComboBox_GotFocus"
+                          IsEnabled="{Binding IsEnable}"
+                          />
+
+
+            </Grid>
+
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="236*" />
                     <ColumnDefinition Width="2" />

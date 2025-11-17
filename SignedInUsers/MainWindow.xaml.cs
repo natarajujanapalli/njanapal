@@ -57,5 +57,35 @@ namespace SignedInUsers
             if (_viewmodel != null)
                 _viewmodel.Load();
         }
+
+        private void ownerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_viewmodel != null)
+                _viewmodel.LoadMachinesByOwner();
+        }
+
+        private void ownerComboBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+
+            // Check if the cast was successful and if the ComboBox is not null
+            if (comboBox != null)
+            {
+                // Set IsDropDownOpen to true to open the dropdown
+                comboBox.IsDropDownOpen = true;
+            }
+        }
+
+        private void ComboBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+
+            // Check if the cast was successful and if the ComboBox is not null
+            if (comboBox != null)
+            {
+                // Set IsDropDownOpen to true to open the dropdown
+                comboBox.IsDropDownOpen = true;
+            }
+        }
     }
 }
