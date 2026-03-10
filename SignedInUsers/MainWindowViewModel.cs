@@ -18,6 +18,8 @@ namespace SignedInUsers
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        const string PowerOff = "Powered Off";
+        const string Running = "Running";
 
         private const string _ownersAll = "ALL";
 
@@ -255,11 +257,11 @@ namespace SignedInUsers
             this.Machines = new ObservableCollection<string>();
             this.VirtualMachines = new ObservableCollection<Machine>();
             this.Users = new ObservableCollection<User>();
+            this.MachineOwnerList = new ObservableCollection<MachineOwner>();
 
             ObservableCollection<string> ownerslist = new ObservableCollection<string>();
-
-            if (string.IsNullOrWhiteSpace(OwnerSelected)) 
-                ownerslist.Add(_ownersAll);
+            OwnerSelected = string.Empty;
+            ownerslist.Add(_ownersAll);
 
             try
             {
@@ -438,14 +440,14 @@ namespace SignedInUsers
 
             if (handler.PingHost(machine) == false)
             {
-                RemoteVirtualMachine.Status = "Powered Off";
+                RemoteVirtualMachine.Status = PowerOff;
                 RemoteVirtualMachine.Message = $"No such host is known. Host : '{machine}'. There might a network problem or Powered Off";
 
                 return RemoteVirtualMachine;
             }
             else
             {
-                RemoteVirtualMachine.Status = "Running";
+                RemoteVirtualMachine.Status = Running;
             }
 
 
@@ -511,7 +513,9 @@ namespace SignedInUsers
 
                     if (_computerSystem != null)
                     {
-                        //RemoteVirtualMachine.HostName = _computerSystem.DNSHostName;
+                        var hm= handler.GetRemoteRegistryValue(machine);
+                        if (!string.IsNullOrWhiteSpace(hm) && !RemoteVirtualMachine.HostName.ToUpper().Equals(hm.ToUpper()))
+                            RemoteVirtualMachine.HostName = hm;
                         RemoteVirtualMachine.Domain = _computerSystem.Domain;
                         RemoteVirtualMachine.Model = _computerSystem.Model;
                         RemoteVirtualMachine.Name = _computerSystem.Name;

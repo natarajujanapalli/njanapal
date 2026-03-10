@@ -1,21 +1,26 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.DirectoryServices.AccountManagement;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
+using System.ServiceProcess;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.ServiceProcess;
-using System.Globalization;
-using System.DirectoryServices.AccountManagement;
 
 namespace njanapal
 {
     public class MachineHandler
     {
+        const string KeyPath = @"SOFTWARE\Microsoft\Virtual Machine\Guest\Parameters";
+        const string ValueName = "PhysicalHostNameFullyQualified";
+
         public ObservableCollection<Machine> GetRemoteMachineNames(string filePath)
         {
             ObservableCollection<Machine> data = new ObservableCollection<Machine>();
@@ -27,13 +32,14 @@ namespace njanapal
                 text = File.ReadAllText(filePath);
 
             //var machine = JsonSerializer.Deserialize<ObservableCollection<Machine>>(text); //.Deserialize<Machine>(text);
-            var _userMachines = JsonSerializer.Deserialize<ObservableCollection<UserMachines>>(text); //.Deserialize<Machine>(text);
+            //var _userMachines = JsonSerializer.Deserialize<ObservableCollection<UserMachines>>(text); //.Deserialize<Machine>(text);
+            var _userMachines = JsonConvert.DeserializeObject<ObservableCollection<UserMachines>>(text);
 
             foreach (var _um in _userMachines)
             {
                 foreach (var m in _um.MachineNames)
                 {
-                    var vm = new Machine { MachineName = m.NodeName.ToUpper(), HostName = m.HostName, Owner = _um.Owner, Purpose = m.Purpose };
+                    var vm = new Machine { MachineName = m.NodeName.ToUpper(), HostName = m.HostName.ToUpper(), Owner = _um.Owner, Purpose = m.Purpose };
                     data.Add(vm);
                 }
             }
@@ -171,19 +177,18 @@ namespace njanapal
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
             foreach (ManagementObject os in searcher.Get())
             {
-                _computerSystem.PrimaryOwnerName = os["PrimaryOwnerName"].ToString();
-                _computerSystem.TotalPhysicalMemory = $"{(int)Math.Round(Convert.ToDouble(os["TotalPhysicalMemory"].ToString()) / (1024 * 1024 * 1024), 2)} GB".PadLeft(5, '0');
-                _computerSystem.NumberOfLogicalProcessors = os["NumberOfLogicalProcessors"].ToString().PadLeft(2, '0');
-                _computerSystem.NumberOfProcessors = os["NumberOfProcessors"].ToString();
-                _computerSystem.Caption = os["Caption"].ToString();
-                _computerSystem.DNSHostName = os["DNSHostName"].ToString();
+                _computerSystem.PrimaryOwnerName = os["PrimaryOwnerName"]?.ToString() ?? string.Empty;
+                _computerSystem.TotalPhysicalMemory = os["TotalPhysicalMemory"] != null
+                    ? $"{(int)Math.Round(Convert.ToDouble(os["TotalPhysicalMemory"].ToString()) / (1024 * 1024 * 1024), 2)} GB".PadLeft(5, '0')
+                    : string.Empty;
+                _computerSystem.NumberOfLogicalProcessors = os["NumberOfLogicalProcessors"]?.ToString().PadLeft(2, '0') ?? string.Empty;
+                _computerSystem.NumberOfProcessors = os["NumberOfProcessors"]?.ToString() ?? string.Empty;
+                _computerSystem.Caption = os["Caption"]?.ToString() ?? string.Empty;
+                _computerSystem.DNSHostName = os["DNSHostName"]?.ToString() ?? string.Empty;
 
-
-                _computerSystem.Domain = os["Domain"].ToString();
-                _computerSystem.Model = os["Model"].ToString();
-                _computerSystem.Name = os["Name"].ToString();
-                //_computerSystem.DNSHostName = os["DNSHostName"].ToString();
-
+                _computerSystem.Domain = os["Domain"]?.ToString() ?? string.Empty;
+                _computerSystem.Model = os["Model"]?.ToString() ?? string.Empty;
+                _computerSystem.Name = os["Name"]?.ToString() ?? string.Empty;
 
                 break;
             }
@@ -208,19 +213,105 @@ namespace njanapal
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
             foreach (ManagementObject os in searcher.Get())
             {
-                Caption = os["Caption"].ToString();
-                Version = os["Version"].ToString();
-                OSArchitecture = os["OSArchitecture"].ToString();
+                Caption = os["Caption"]?.ToString() ?? string.Empty;
+                Version = os["Version"]?.ToString() ?? string.Empty;
+                OSArchitecture = os["OSArchitecture"]?.ToString() ?? string.Empty;
 
-                LastBootUpTime = os["LastBootUpTime"].ToString();
-                LastBootUpTime = $"{LastBootUpTime.Substring(0, 4)}-{LastBootUpTime.Substring(4, 2)}-{LastBootUpTime.Substring(6, 2)} {LastBootUpTime.Substring(8, 2)}:{LastBootUpTime.Substring(10, 2)}:{LastBootUpTime.Substring(12, 2)}";
+                LastBootUpTime = os["LastBootUpTime"]?.ToString() ?? string.Empty;
+                if (LastBootUpTime.Length >= 14)
+                    LastBootUpTime = $"{LastBootUpTime.Substring(0, 4)}-{LastBootUpTime.Substring(4, 2)}-{LastBootUpTime.Substring(6, 2)} {LastBootUpTime.Substring(8, 2)}:{LastBootUpTime.Substring(10, 2)}:{LastBootUpTime.Substring(12, 2)}";
 
-                Organization = os["Organization"].ToString();
-                NumberOfUsers = os["NumberOfUsers"].ToString();
+                Organization = os["Organization"]?.ToString() ?? string.Empty;
+                NumberOfUsers = os["NumberOfUsers"]?.ToString() ?? string.Empty;
                 break;
             }
             return (Caption, Version, OSArchitecture, LastBootUpTime, Organization, NumberOfUsers);
         }
+
+        public string GetRemoteRegistryValue(string machineName)
+        {
+            if (string.IsNullOrWhiteSpace(machineName))
+                return string.Empty;
+
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.FileName = "reg.exe";
+                p.StartInfo.Arguments = $"query \"\\\\{machineName}\\HKLM\\{KeyPath}\" /v \"{ValueName}\" /reg:64";
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+
+                string output = p.StandardOutput.ReadToEnd();
+                string error = p.StandardError.ReadToEnd();
+                p.WaitForExit();
+
+                if (p.ExitCode == 0 && !string.IsNullOrWhiteSpace(output))
+                {
+                    string[] lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string line in lines)
+                    {
+                        string trimmed = line.Trim();
+                        if (trimmed.IndexOf(ValueName, StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            string[] parts = trimmed.Split(new[] { "REG_SZ", "REG_EXPAND_SZ", "REG_MULTI_SZ", "REG_DWORD", "REG_QWORD" }, StringSplitOptions.None);
+                            if (parts.Length >= 2)
+                                return parts[parts.Length - 1].Trim();
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Machine unreachable or access denied
+            }
+
+            return string.Empty;
+        }
+
+        //public string GetVirtualMachineOwnerFromHost(string vmMachineName)
+        //{
+        //    if (string.IsNullOrWhiteSpace(vmMachineName))
+        //        return string.Empty;
+        //
+        //    string hostName = GetRemoteRegistryValue(vmMachineName);
+        //    if (string.IsNullOrWhiteSpace(hostName))
+        //        return string.Empty;
+        //
+        //    string vmName = GetRemoteRegistryValue(vmMachineName, KeyPath, VmNameValue);
+        //    if (string.IsNullOrWhiteSpace(vmName))
+        //        vmName = vmMachineName;
+        //
+        //    try
+        //    {
+        //        ConnectionOptions connection = new ConnectionOptions();
+        //        ManagementScope scope = new ManagementScope("\\\\" + hostName + "\\root\\virtualization\\v2", connection);
+        //        scope.Connect();
+        //
+        //        ObjectQuery query = new ObjectQuery($"SELECT * FROM Msvm_VirtualSystemSettingData WHERE ElementName = '{vmName}'");
+        //        ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+        //
+        //        foreach (ManagementObject vm in searcher.Get())
+        //        {
+        //            string[] notes = vm["Notes"] as string[];
+        //            if (notes != null && notes.Length > 0)
+        //            {
+        //                string joined = string.Join(Environment.NewLine, notes.Where(n => !string.IsNullOrWhiteSpace(n)));
+        //                if (!string.IsNullOrWhiteSpace(joined))
+        //                    return joined;
+        //            }
+        //            break;
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // Host unreachable, access denied, or Hyper-V WMI not available
+        //    }
+        //
+        //    return string.Empty;
+        //}
 
         public string GetRegistryScript(ObservableCollection<string> machines)
         {
