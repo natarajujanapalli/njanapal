@@ -61,7 +61,34 @@ namespace SignedInUsers
         private void ownerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_viewmodel != null)
-                _viewmodel.LoadMachinesByOwner();
+                _viewmodel.SelectAllOwners();
+        }
+
+        private void OwnerCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (_viewmodel != null && sender is CheckBox checkBox && checkBox.Content is string ownerName)
+            {
+                _viewmodel.HandleOwnerSelectionChanged(ownerName, checkBox.IsChecked == true);
+            }
+            else if (_viewmodel != null)
+            {
+                _viewmodel.SelectAllOwners();
+            }
+
+            if (ownerComboBox != null)
+                ownerComboBox.IsDropDownOpen = true;
+        }
+
+        private void OwnerSelectAllMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (_viewmodel != null)
+                _viewmodel.HandleOwnerSelectionChanged("ALL", true);
+        }
+
+        private void OwnerDeselectAllMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (_viewmodel != null)
+                _viewmodel.HandleOwnerSelectionChanged("ALL", false);
         }
 
         private void ownerComboBox_GotFocus(object sender, RoutedEventArgs e)

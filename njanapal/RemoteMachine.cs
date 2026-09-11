@@ -235,25 +235,117 @@ namespace njanapal
         }
 
 
-        // Remote Shutdown
+        // Remote Sign Off User
+        public (bool Success, string Output, string Error) SignOffUser(string serverName, string sessionId)
+        {
+            if (string.IsNullOrWhiteSpace(serverName) || string.IsNullOrWhiteSpace(sessionId))
+                return (false, string.Empty, "Server name and session ID are required.");
 
-        public bool RemoteShutdown(string userName, string password, string ip)
+            try
+            {
+                IntPtr val = IntPtr.Zero;
+                Wow64DisableWow64FsRedirection(ref val);
+
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.FileName = "cmd.exe";
+                p.StartInfo.Arguments = $"/c logoff {sessionId} /server:{serverName}";
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+
+                string output = p.StandardOutput.ReadToEnd();
+                string error = p.StandardError.ReadToEnd();
+                p.WaitForExit();
+
+                Wow64RevertWow64FsRedirection(ref val);
+
+                return (p.ExitCode == 0, output, error);
+            }
+            catch (Exception ex)
+            {
+                return (false, string.Empty, ex.Message);
+            }
+        }
+
+        public (bool Success, string Message) TurnOnVirtualMachine(string hostName, string vmName)
+        {
+            if (string.IsNullOrWhiteSpace(hostName) || string.IsNullOrWhiteSpace(vmName))
+                return (false, "Host name and VM name are required.");
+
+            try
+            {
+                ConnectionOptions op = new ConnectionOptions();
+                ManagementScope scope = new ManagementScope("\\\\" + hostName + "\\root\\virtualization\\v2", op);
+                scope.Connect();
+
+                ObjectQuery oq = new ObjectQuery($"SELECT * FROM Msvm_ComputerSystem WHERE ElementName = '{vmName}'");
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, oq);
+
+                foreach (ManagementObject vm in searcher.Get())
+                {
+                    // EnabledState: 2 = Running, 3 = Off, 32768 = Paused
+                    if (Convert.ToUInt16(vm["EnabledState"]) == 2)
+                        return (true, "Already running.");
+
+                    // RequestStateChange: 2 = Turn On
+                    ManagementBaseObject inParams = vm.GetMethodParameters("RequestStateChange");
+                    inParams["RequestedState"] = 2;
+                    ManagementBaseObject outParams = vm.InvokeMethod("RequestStateChange", inParams, null);
+
+                    // ReturnValue: 0 = Completed, 4096 = Job started
+                    uint returnValue = Convert.ToUInt32(outParams["ReturnValue"]);
+                    if (returnValue == 0 || returnValue == 4096)
+                        return (true, "VM is turning on.");
+
+                    return (false, $"RequestStateChange failed with return value: {returnValue}.");
+                }
+
+                return (false, $"VM '{vmName}' not found on host '{hostName}'.");
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrWhiteSpace(ex.Message) && ex.Message.Trim().Equals("Access is denied.", StringComparison.OrdinalIgnoreCase))
+                    return (false, $"Access denied. Your account don’t have sufficient permissions on '{hostName}' to perform this action.");
+
+                return (false, ex.Message);
+            }
+        }
+
+        // Remote Restart Machine
+        public bool Reboot(string machineNodeName, string userName = null, string password = null)
+        {
+            return InvokeOSMethod(machineNodeName, "Reboot", userName, password);
+        }
+
+        // Remote Shutdown Machine
+        public bool Shutdown(string machineNodeName, string userName = null, string password = null)
+        {
+            return InvokeOSMethod(machineNodeName, "ShutDown", userName, password);
+        }
+
+        // Remote Log Off Machine
+        private bool InvokeOSMethod(string machineName, string methodName, string userName = null, string password = null)
         {
             try
             {
                 ConnectionOptions op = new ConnectionOptions();
-                op.Username = userName;
-                op.Password = password;
-                // Make a connection to a remote computer.  
-                ManagementScope scope = new ManagementScope("\\\\" + ip + "\\root\\cimv2", op);
+                if (!string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(password))
+                {
+                    op.Username = userName;
+                    op.Password = password;
+                }
+
+                ManagementScope scope = new ManagementScope("\\\\" + machineName + "\\root\\cimv2", op);
                 scope.Connect();
-                //Query system for Operating System information  
+
                 ObjectQuery oq = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
                 ManagementObjectSearcher query = new ManagementObjectSearcher(scope, oq);
                 ManagementObjectCollection queryCollection = query.Get();
                 foreach (ManagementObject obj in queryCollection)
                 {
-                    obj.InvokeMethod("ShutDown", null); //shutdown  
+                    obj.InvokeMethod(methodName, null);
                 }
 
                 return true;
@@ -264,39 +356,40 @@ namespace njanapal
             }
         }
 
-        // Remote Reboot
-        public bool Reboot(string userName, string password, string ip)
+        public LoggedInUser CurrentLoggedInAccount()
         {
-            try
+            using (var context = new PrincipalContext(ContextType.Machine))
             {
-                ConnectionOptions op = new ConnectionOptions();
-                //op.Username = userName;
-                //op.Password = password;
-                // Make a connection to a remote computer.  
-                ManagementScope scope = new ManagementScope("\\\\" + ip + "\\root\\cimv2", op);
-                scope.Connect();
+                // Find the current user
+                var user = UserPrincipal.Current;
 
-                //Query system for Operating System information  
-                ObjectQuery oq = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
-
-                ManagementObjectSearcher query = new ManagementObjectSearcher(scope, oq);
-                ManagementObjectCollection queryCollection = query.Get();
-                foreach (ManagementObject obj in queryCollection)
+                return new LoggedInUser
                 {
-                    obj.InvokeMethod("Reboot", null); //shutdown  
-                }
+                    DisplayName = user.DisplayName,
+                    EmailAddress = user.EmailAddress,
+                    Guid = user.Guid,
+                    LastLogon = user.LastLogon.ToString()
+                };
+                //Console.WriteLine("Full Name: " + user.DisplayName);
+                //Console.WriteLine("Email: " + user.EmailAddress);
+                //Console.WriteLine("GUID: " + user.Guid);
+                //Console.WriteLine("Last Login: " + user.LastLogon);
+            }
 
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return null;
         }
-
-
 
     }
 
-
+    public class LoggedInUser
+    {
+        public string UserName { get; set; }
+        public string Domain { get; set; }
+        public string LogonId { get; set; }
+        public string LogonType { get; set; }  // e.g., Interactive, Network
+        public string DisplayName { get; set; }
+        public string EmailAddress { get; set; }
+        public Guid? Guid { get; set; }
+        public string LastLogon { get; set; }
+    }
 }

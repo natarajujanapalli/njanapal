@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SignedInUsers"
         mc:Ignorable="d"
-        Title="Signed In Users - Nataraju" Height="810" Width="1440" WindowStartupLocation="CenterScreen" >
+        Title="V Lens - Nataraju" Height="810" Width="1440" WindowStartupLocation="CenterScreen" >
     <DockPanel>
         <Rectangle DockPanel.Dock="Bottom" Height="16" HorizontalAlignment="Stretch" Name="rectangle8" Stroke="Black" VerticalAlignment="Top">
             <Rectangle.Fill>
@@ -83,13 +83,28 @@
                 <ComboBox Grid.Column="1" Margin="0,-20,5,0" Height="30" TabIndex="4" Name="ownerComboBox"
                           VerticalAlignment="Center" 
                           HorizontalContentAlignment="Left" VerticalContentAlignment="Center" 
-                          ItemsSource ="{Binding Owners}" 
-                          SelectedValue ="{Binding OwnerSelected}"
-                          SelectionChanged="ownerComboBox_SelectionChanged"
+                          ItemsSource="{Binding Owners}"
+                          Text="{Binding SelectedOwnersDisplay, Mode=OneWay}"
                           IsEditable="True"
+                          IsReadOnly="True"
+                          StaysOpenOnEdit="True"
                           GotFocus="ownerComboBox_GotFocus"
-                          IsEnabled="{Binding IsEnable}"
-                          />
+                          IsEnabled="{Binding IsEnable}">
+                    <ComboBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Select All" Click="OwnerSelectAllMenuItem_Click" />
+                            <MenuItem Header="Deselect All" Click="OwnerDeselectAllMenuItem_Click" />
+                        </ContextMenu>
+                    </ComboBox.ContextMenu>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding OwnerName}"
+                                      IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Checked="OwnerCheckBox_Checked"
+                                      Unchecked="OwnerCheckBox_Checked" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
 
             </Grid>
@@ -128,7 +143,9 @@
 
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Reboot" Command="{Binding RebootCommand}" IsEnabled="{Binding IsRebootEnable}" />
+                                    <MenuItem Header="Shut down" Command="{Binding ShutdownCommand}" />
+                                    <MenuItem Header="Restart" Command="{Binding RebootCommand}" IsEnabled="{Binding IsRebootEnable}" />
+                                    <MenuItem Header="Turn on" Command="{Binding TurnOnCommand}" />
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
 
@@ -457,6 +474,7 @@
                     </TabItem>
  
                     <TabItem Header="Host Name's Script" Name="RegEditHostNameTabItem" IsSelected="False" Style="{DynamicResource CommonTabItem}"
+                             Visibility="Visible"
                              ToolTip="Registry script to get Hostname of each node. Execute the script in command prompt.">
                        
                         <TextBox Text="{Binding RegistryScript}" FontSize="15" IsReadOnly="True"

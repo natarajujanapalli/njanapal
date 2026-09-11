@@ -21,7 +21,9 @@ namespace SignedInUsers
         const string PowerOff = "Powered Off";
         const string Running = "Running";
 
-        private const string _ownersAll = "ALL";
+        public string LogInUserName { get; set; }
+
+        private bool _isUpdatingOwnerSelection;
 
         private bool _isEnable;
         public bool IsEnable
@@ -89,20 +91,19 @@ namespace SignedInUsers
             set { _filePaths = value; RaisePropertyChanged("FilePaths"); }
         }
 
-        private ObservableCollection<string> _owners;
+        private ObservableCollection<OwnerSelectionItem> _owners;
 
-        public ObservableCollection<string> Owners
+        public ObservableCollection<OwnerSelectionItem> Owners
         {
             get { return _owners; }
             set { _owners = value; RaisePropertyChanged("Owners"); }
         }
 
-        private string _ownerSelected;
-
-        public string OwnerSelected
+        private string _selectedOwnersDisplay;
+        public string SelectedOwnersDisplay
         {
-            get { return _ownerSelected; }
-            set { _ownerSelected = value; RaisePropertyChanged("OwnerSelected"); }
+            get { return _selectedOwnersDisplay; }
+            set { _selectedOwnersDisplay = value; RaisePropertyChanged("SelectedOwnersDisplay"); }
         }
 
         public ObservableCollection<MachineOwner> MachineOwnerList { get; set; }
@@ -120,15 +121,6 @@ namespace SignedInUsers
             get { return _selectedMachine; }
             set { _selectedMachine = value; RaisePropertyChanged("SelectedMachine"); }
         }
-
-
-        //private ObservableCollection<RemoteMachineUser> _userDetails;
-        //public ObservableCollection<RemoteMachineUser> UserDetails
-        //{
-        //    get { return _userDetails; }
-        //    set { _userDetails = value; RaisePropertyChanged("UserDetails"); }
-        //}
-
 
         private ObservableCollection<Machine> _remoteVirtualMachines;
         public ObservableCollection<Machine> VirtualMachines
@@ -179,8 +171,8 @@ namespace SignedInUsers
         public RelayCommand SignOffCommand { get; set; }
         public RelayCommand ExportExcelCommand { get; set; }
         public RelayCommand RebootCommand { get; set; }
-
-
+        public RelayCommand ShutdownCommand { get; set; }
+        public RelayCommand TurnOnCommand { get; set; }
 
         //bool isDisplayState = Convert.ToBoolean(ConfigurationManager.AppSettings["DisplayState"].ToString());
         //bool isDisplayIdleTime = Convert.ToBoolean(ConfigurationManager.AppSettings["DisplayIdleTime"].ToString());
@@ -205,6 +197,8 @@ namespace SignedInUsers
             SignOffCommand = new RelayCommand(SignOff);
             ExportExcelCommand = new RelayCommand(ExportExcel);
             RebootCommand = new RelayCommand(Reboot);
+            ShutdownCommand = new RelayCommand(Shutdown);
+            TurnOnCommand = new RelayCommand(TurnOn);
 
             //FilePath = $"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RemoteMachines.txt")}";
 
@@ -220,13 +214,41 @@ namespace SignedInUsers
             FilePaths = GetFilePaths();
 
             RegistryScript = string.Empty;
+
+            LogInUserName = GetLoggedOnDisplayName();
+        }
+
+        private string GetLoggedOnDisplayName()
+        {
+            try
+            {
+                // Fast local registry lookup — no domain/network required
+                string displayName = (string)Registry.GetValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI",
+                    "LastLoggedOnDisplayName", null);
+                if (!string.IsNullOrWhiteSpace(displayName))
+                    return displayName;
+            }
+            catch { }
+
+            try
+            {
+                // Fallback: domain lookup
+                string displayName = handler.GetUserDisplayName(Environment.UserName);
+                if (!string.IsNullOrWhiteSpace(displayName))
+                    return displayName;
+            }
+            catch { }
+
+            // Last fallback: environment username
+            return Environment.UserName;
         }
 
         private ObservableCollection<string> GetFilePaths()
         {
             ObservableCollection<string> files = new ObservableCollection<string>();
 
-            foreach(var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.json"))
+            foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.json"))
             {
                 files.Add(file);
             }
@@ -260,8 +282,6 @@ namespace SignedInUsers
             this.MachineOwnerList = new ObservableCollection<MachineOwner>();
 
             ObservableCollection<string> ownerslist = new ObservableCollection<string>();
-            OwnerSelected = string.Empty;
-            ownerslist.Add(_ownersAll);
 
             try
             {
@@ -283,7 +303,24 @@ namespace SignedInUsers
 
                 RegistryScript = handler.GetRegistryScript(this.Machines);
 
-                Owners = new ObservableCollection<string>(ownerslist.Distinct().OrderBy(r => r));
+                Owners = new ObservableCollection<OwnerSelectionItem>(ownerslist.Distinct().OrderBy(r => r).Select(r => new OwnerSelectionItem { OwnerName = r }));
+                //string tmp = System.Security.Principal.WindowsIdentity.GetCurrent().Name; // Environment.UserName;
+                //var currentAccount = remote.CurrentLoggedInAccount();
+                //UserPrincipal user = UserPrincipal.Current;
+                //string displayName = user.DisplayName;
+                //string samName = user.SamAccountName;
+
+                var defaultOwner = Owners.FirstOrDefault(r => r.OwnerName.Equals(LogInUserName, StringComparison.OrdinalIgnoreCase));
+                if (defaultOwner != null)
+                {
+                    defaultOwner.IsSelected = true;
+                    SelectAllOwners();
+                }
+                else
+                {
+                    SelectedOwnersDisplay = string.Empty;
+                }
+
             }
             catch (Exception ex)
             {
@@ -292,14 +329,55 @@ namespace SignedInUsers
 
         }
 
-        public void LoadMachinesByOwner ()
+        public void SelectAllOwners()
         {
-            if(OwnerSelected == _ownersAll)
+            UpdateOwnerSelectionDisplayAndMachineFilter();
+        }
+
+        public void HandleOwnerSelectionChanged(string ownerName, bool isSelected)
+        {
+            if (Owners == null || _isUpdatingOwnerSelection)
+                return;
+
+            _isUpdatingOwnerSelection = true;
+            try
             {
-                this.Machines = new ObservableCollection<string>(MachineOwnerList.Select(r => r.Machine));
+                if ("ALL".Equals(ownerName, StringComparison.OrdinalIgnoreCase))
+                {
+                    foreach (var owner in Owners)
+                        owner.IsSelected = isSelected;
+                }
+
+                UpdateOwnerSelectionDisplayAndMachineFilter();
+            }
+            finally
+            {
+                _isUpdatingOwnerSelection = false;
+            }
+        }
+
+        private void UpdateOwnerSelectionDisplayAndMachineFilter()
+        {
+            var selectedOwners = Owners == null
+                ? new List<string>()
+                : Owners.Where(r => r.IsSelected).Select(r => r.OwnerName).ToList();
+
+            SelectedOwnersDisplay = string.Join(", ", selectedOwners);
+
+            if (selectedOwners.Count == 0)
+            {
+                //this.Machines = new ObservableCollection<string>(MachineOwnerList.Select(r => r.Machine).Distinct().OrderBy(r => r));
+                this.Machines = new ObservableCollection<string>();
             }
             else
-                this.Machines = new ObservableCollection<string>(MachineOwnerList.Where(r => r.Owner.Equals(OwnerSelected)).Select(r => r.Machine));
+            {
+                this.Machines = new ObservableCollection<string>(MachineOwnerList
+                    .Where(r => selectedOwners.Contains(r.Owner, StringComparer.OrdinalIgnoreCase))
+                    .Select(r => r.Machine)
+                    .Distinct()
+                    .OrderBy(r => r));
+            }
+
             RegistryScript = handler.GetRegistryScript(this.Machines);
         }
 
@@ -331,8 +409,8 @@ namespace SignedInUsers
                     if (result != null)
                     {
                         VirtualMachines.Add(result);
-                        
-                        foreach(var u in result.Users)
+
+                        foreach (var u in result.Users)
                             Users.Add(u);
                     }
 
@@ -360,7 +438,7 @@ namespace SignedInUsers
 
             this.IsEnable = true;
         }
-       
+
         public async void Go()
         {
             if (string.IsNullOrWhiteSpace(this.SelectedMachine) || IsEnable == false)
@@ -513,7 +591,7 @@ namespace SignedInUsers
 
                     if (_computerSystem != null)
                     {
-                        var hm= handler.GetRemoteRegistryValue(machine);
+                        var hm = handler.GetRemoteRegistryValue(machine);
                         if (!string.IsNullOrWhiteSpace(hm) && !RemoteVirtualMachine.HostName.ToUpper().Equals(hm.ToUpper()))
                             RemoteVirtualMachine.HostName = hm;
                         RemoteVirtualMachine.Domain = _computerSystem.Domain;
@@ -720,41 +798,6 @@ namespace SignedInUsers
 
         }
 
-        private void SignOff()
-        {
-            if (SelectedUser == null)
-            {
-                MessageBox.Show("Selected user cannot be empty.");
-                return;
-            }
-
-            string SessionID = SelectedUser.Id;
-            string ServerName = SelectedUser.MachineName;
-
-            string command = $"logoff {SessionID} /server:{ServerName}";
-
-            //MessageBox.Show(command, "command", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            ////cmd c = new cmd();
-            ////c.RunCommandAsAdmin(AppDomain.CurrentDomain.BaseDirectory, command);
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SignOff.bat");
-            File.WriteAllText(path, command);
-
-            if(File.Exists(path))
-            {
-                System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory);
-                if(MessageBoxResult.Yes == MessageBox.Show("Do you want to reload users?", "Reload logged in Users", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes))
-                {
-                    this.SelectedMachine = ServerName;
-                    Go();
-                }
-            }
-
-            //ExecuteBatFile(AppDomain.CurrentDomain.BaseDirectory, "Test.bat");
-            //File.Delete(path);
-            //Go();
-        }
-
         private void ExportExcel()
         {
             //DataTable dt = ConvertToDataTable<RemoteMachineUser>(UserDetails);
@@ -774,7 +817,7 @@ namespace SignedInUsers
                 // Code example for Method 1
                 StringBuilder csvContent = new StringBuilder();
 
-                foreach(DataColumn col in dt.Columns)
+                foreach (DataColumn col in dt.Columns)
                 {
                     csvContent.Append(col.ColumnName + ",");
                 }
@@ -846,31 +889,133 @@ namespace SignedInUsers
             return dataTable;
         }
 
+        private void SignOff()
+        {
+            if (SelectedUser == null)
+            {
+                MessageBox.Show("Selected user cannot be empty.");
+                return;
+            }
+
+            string sessionId = SelectedUser.Id;
+            string serverName = SelectedUser.MachineName;
+
+            if (string.IsNullOrWhiteSpace(sessionId) || string.IsNullOrWhiteSpace(serverName))
+            {
+                MessageBox.Show("Session ID or Machine Name is missing.");
+                return;
+            }
+
+            var confirmation = MessageBox.Show($"Do you want to sign out '{SelectedUser.DisplayName}' (Session: {sessionId}) from '{serverName}'?",
+                "Confirm Sign Off",
+                MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+
+            if (confirmation != MessageBoxResult.Yes)
+                return;
+
+            var (success, output, error) = remote.SignOffUser(serverName, sessionId);
+
+            if (success)
+            {
+                this.Status = $"Sign Off Successful: User '{SelectedUser.DisplayName}' signed off from '{serverName}'.";
+
+                // Remove the signed-off user from the Users list
+                var userToRemove = Users.FirstOrDefault(u => u.Id == sessionId && u.MachineName == serverName);
+                if (userToRemove != null)
+                    Users.Remove(userToRemove);
+
+                // Remove the user from the corresponding VM's Users collection
+                var vm = VirtualMachines.FirstOrDefault(v => v.MachineName == serverName);
+                if (vm?.Users != null)
+                {
+                    var vmUser = vm.Users.FirstOrDefault(u => u.Id == sessionId);
+                    if (vmUser != null)
+                        vm.Users.Remove(vmUser);
+                }
+
+                this.SelectedMachine = serverName;
+                //Go();
+            }
+            else
+            {
+                MessageBox.Show($"Failed to sign off user.\n{error}", "Sign Off Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            //if (SelectedUser == null)
+            //{
+            //    MessageBox.Show("Selected user cannot be empty.");
+            //    return;
+            //}
+            //
+            //string SessionID = SelectedUser.Id;
+            //string ServerName = SelectedUser.MachineName;
+            //
+            //string command = $"logoff {SessionID} /server:{ServerName}";
+            //
+            ////MessageBox.Show(command, "command", MessageBoxButton.OK, MessageBoxImage.Information);
+            //
+            //////cmd c = new cmd();
+            //////c.RunCommandAsAdmin(AppDomain.CurrentDomain.BaseDirectory, command);
+            //string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SignOff.bat");
+            //File.WriteAllText(path, command);
+            //
+            //if(File.Exists(path))
+            //{
+            //    System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory);
+            //    if(MessageBoxResult.Yes == MessageBox.Show("Do you want to reload users?", "Reload logged in Users", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes))
+            //    {
+            //        this.SelectedMachine = ServerName;
+            //        Go();
+            //    }
+            //}
+            //
+            ////ExecuteBatFile(AppDomain.CurrentDomain.BaseDirectory, "Test.bat");
+            ////File.Delete(path);
+            ////Go();
+        }
+
         private void Reboot()
         {
             if (SelectedVirtualMachine != null && !string.IsNullOrEmpty(SelectedVirtualMachine.MachineName))
-                remote.Reboot("", "", SelectedVirtualMachine.MachineName);
+                remote.Reboot(SelectedVirtualMachine.MachineName);
         }
 
-        //public void ExecuteBatFile(string _batDir, string file)
-        //{
-        //    Process proc = null;
-        //
-        //    //string _batDir = string.Format(@"C:\");
-        //    proc = new Process();
-        //    proc.StartInfo.WorkingDirectory = _batDir;
-        //    proc.StartInfo.FileName = file;
-        //    proc.StartInfo.CreateNoWindow = false;
-        //    proc.Start();
-        //    proc.WaitForExit();
-        //    int ExitCode = proc.ExitCode;
-        //    proc.Close();
-        //}
+        private void Shutdown()
+        {
+            if (SelectedVirtualMachine != null && !string.IsNullOrEmpty(SelectedVirtualMachine.MachineName))
+                remote.Shutdown(SelectedVirtualMachine.MachineName);
+        }
+
+        private void TurnOn()
+        {
+            if (SelectedVirtualMachine != null && !string.IsNullOrEmpty(SelectedVirtualMachine.MachineName))
+            {
+                var (success, message) = remote.TurnOnVirtualMachine(SelectedVirtualMachine.HostName, SelectedVirtualMachine.MachineName);
+                MessageBox.Show(message, success ? "Turn On VM" : "Turn On VM Failed",
+                    MessageBoxButton.OK, success ? MessageBoxImage.Information : MessageBoxImage.Error);
+            }
+        }
     }
 
     public class MachineOwner
     {
         public string Machine { get; set; }
         public string Owner { get; set; }
+    }
+
+    public class OwnerSelectionItem : ViewModelBase
+    {
+        private string _ownerName;
+        public string OwnerName
+        {
+            get { return _ownerName; }
+            set { _ownerName = value; RaisePropertyChanged("OwnerName"); }
+        }
+
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set { _isSelected = value; RaisePropertyChanged("IsSelected"); }
+        }
     }
 }
