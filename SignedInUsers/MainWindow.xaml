@@ -118,8 +118,14 @@
                     <ColumnDefinition Width="943*"/>-->
                 </Grid.ColumnDefinitions>
 
-                <ListBox Grid.Column="0" ItemsSource="{Binding Machines}" SelectedItem="{Binding SelectedMachine}" 
-                             BorderThickness="1" BorderBrush="Black" Background="Transparent" MouseDoubleClick="ListBox_MouseDoubleClick">
+                <ListBox x:Name="machineListBox" Grid.Column="0" ItemsSource="{Binding Machines}" SelectedItem="{Binding SelectedMachine}" SelectionMode="Extended"
+                             BorderThickness="1" BorderBrush="Black" Background="Transparent" MouseDoubleClick="ListBox_MouseDoubleClick" SelectionChanged="MachineListBox_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding}"
+                                      IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                     <ListBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem IsEnabled="{Binding IsEnable}" Header="Remove" Command="{Binding RemoveCommand}"/>
@@ -474,7 +480,7 @@
                     </TabItem>
  
                     <TabItem Header="Host Name's Script" Name="RegEditHostNameTabItem" IsSelected="False" Style="{DynamicResource CommonTabItem}"
-                             Visibility="Visible"
+                             Visibility="{Binding DisplayHostNameScript}"
                              ToolTip="Registry script to get Hostname of each node. Execute the script in command prompt.">
                        
                         <TextBox Text="{Binding RegistryScript}" FontSize="15" IsReadOnly="True"

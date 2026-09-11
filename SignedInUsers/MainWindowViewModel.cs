@@ -122,6 +122,13 @@ namespace SignedInUsers
             set { _selectedMachine = value; RaisePropertyChanged("SelectedMachine"); }
         }
 
+        private ObservableCollection<string> _selectedMachines;
+        public ObservableCollection<string> SelectedMachines
+        {
+            get { return _selectedMachines; }
+            set { _selectedMachines = value; RaisePropertyChanged("SelectedMachines"); }
+        }
+
         private ObservableCollection<Machine> _remoteVirtualMachines;
         public ObservableCollection<Machine> VirtualMachines
         {
@@ -156,6 +163,13 @@ namespace SignedInUsers
         {
             get { return _registryScript; }
             set { _registryScript = value; RaisePropertyChanged("RegistryScript"); }
+        }
+
+        private Visibility _displayHostNameScript;
+        public Visibility DisplayHostNameScript
+        {
+            get { return _displayHostNameScript; }
+            set { _displayHostNameScript = value; RaisePropertyChanged("DisplayHostNameScript"); }
         }
 
 
@@ -210,12 +224,15 @@ namespace SignedInUsers
             VirtualMachines = new ObservableCollection<Machine>();
             Users = new ObservableCollection<User>();
             MachineOwnerList = new ObservableCollection<MachineOwner>();
+            SelectedMachines = new ObservableCollection<string>();
 
             FilePaths = GetFilePaths();
 
             RegistryScript = string.Empty;
+            DisplayHostNameScript = Convert.ToBoolean(ConfigurationManager.AppSettings["DisplayHostNameScript"].ToString()) ? Visibility.Visible : Visibility.Collapsed;
 
             LogInUserName = GetLoggedOnDisplayName();
+
         }
 
         private string GetLoggedOnDisplayName()
@@ -280,6 +297,7 @@ namespace SignedInUsers
             this.VirtualMachines = new ObservableCollection<Machine>();
             this.Users = new ObservableCollection<User>();
             this.MachineOwnerList = new ObservableCollection<MachineOwner>();
+            this.SelectedMachines = new ObservableCollection<string>();
 
             ObservableCollection<string> ownerslist = new ObservableCollection<string>();
 
@@ -334,6 +352,13 @@ namespace SignedInUsers
             UpdateOwnerSelectionDisplayAndMachineFilter();
         }
 
+        public void UpdateSelectedMachines(IEnumerable<string> selectedMachines)
+        {
+            SelectedMachines = selectedMachines == null
+                ? new ObservableCollection<string>()
+                : new ObservableCollection<string>(selectedMachines.Where(r => !string.IsNullOrWhiteSpace(r)).Distinct(StringComparer.OrdinalIgnoreCase));
+        }
+
         public void HandleOwnerSelectionChanged(string ownerName, bool isSelected)
         {
             if (Owners == null || _isUpdatingOwnerSelection)
@@ -379,6 +404,7 @@ namespace SignedInUsers
             }
 
             RegistryScript = handler.GetRegistryScript(this.Machines);
+            SelectedMachines = new ObservableCollection<string>();
         }
 
         public StringBuilder Statuses = new StringBuilder();
@@ -441,54 +467,68 @@ namespace SignedInUsers
 
         public async void Go()
         {
-            if (string.IsNullOrWhiteSpace(this.SelectedMachine) || IsEnable == false)
+            //if (string.IsNullOrWhiteSpace(this.SelectedMachine) || IsEnable == false)
+            //    return;
+
+            var machinesToProcess = SelectedMachines == null
+                        ? new List<string>()
+                        : SelectedMachines.Where(r => !string.IsNullOrWhiteSpace(r)).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(r => r).OrderBy(r => r).ToList();
+
+            if (machinesToProcess.Count == 0 || IsEnable == false)
+            {
+                if (IsEnable)
+                    this.Status = "Select one or more machines to process.";
                 return;
+            }
 
             Stopwatch timer = new Stopwatch();
             this.IsEnable = false;
 
-            try
+            timer.Start();
+
+            foreach (var machine in machinesToProcess)
             {
-                timer.Start();
-
-                this.Status = $"Processing : '{SelectedMachine}'";
-
-                var temp = this.VirtualMachines.ToList();
-                temp.RemoveAll(r => r.MachineName.Equals(SelectedMachine));
-                this.VirtualMachines = new ObservableCollection<Machine>(temp);
-
-                var tempU = this.Users.ToList();
-                tempU.RemoveAll(r => r.MachineName.Equals(SelectedMachine));
-                this.Users = new ObservableCollection<User>(tempU);
-
-
-                //Process(SelectedMachine);
-                var result = await Task.Run(() => Process(SelectedMachine));
-
-                if (result != null)
+                try
                 {
-                    VirtualMachines.Add(result);
+                    this.Status = $"Processing : '{machine}' ({machinesToProcess.IndexOf(machine) + 1}/{machinesToProcess.Count})";
 
-                    foreach (var u in result.Users)
-                        Users.Add(u);
+                    var temp = this.VirtualMachines.ToList();
+                    temp.RemoveAll(r => r.MachineName.Equals(machine));
+                    this.VirtualMachines = new ObservableCollection<Machine>(temp);
+
+                    var tempU = this.Users.ToList();
+                    tempU.RemoveAll(r => r.MachineName.Equals(machine));
+                    this.Users = new ObservableCollection<User>(tempU);
+
+                    //Process(machine);
+                    var result = await Task.Run(() => Process(machine));
+
+                    if (result != null)
+                    {
+                        VirtualMachines.Add(result);
+
+                        foreach (var u in result.Users)
+                            Users.Add(u);
+                    }
+
+                    Statuses.AppendLine(this.Status);
+
+                    IsRebootEnable = VirtualMachines.Count > 0;
                 }
-
-                timer.Stop();
-                TimeSpan timeTaken = timer.Elapsed;
-                string hrs = timeTaken.Hours.ToString().PadLeft(2, '0');
-                string mins = timeTaken.Minutes.ToString().PadLeft(2, '0');
-                string secs = timeTaken.Seconds.ToString().PadLeft(2, '0');
-                string millisecs = timeTaken.Milliseconds.ToString().PadLeft(3, '0');
-
-                this.Status = $"Time Taken: {hrs} : {mins} : {secs} : {millisecs} to process: '{SelectedMachine}'.";
-                Statuses.AppendLine(this.Status);
-
-                IsRebootEnable = VirtualMachines.Count > 0;
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Exception Occurred");
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Exception Occurred");
-            }
+
+            timer.Stop();
+            TimeSpan timeTaken = timer.Elapsed;
+            string hrs = timeTaken.Hours.ToString().PadLeft(2, '0');
+            string mins = timeTaken.Minutes.ToString().PadLeft(2, '0');
+            string secs = timeTaken.Seconds.ToString().PadLeft(2, '0');
+            string millisecs = timeTaken.Milliseconds.ToString().PadLeft(3, '0');
+
+            this.Status = $"Time Taken: {hrs} : {mins} : {secs} : {millisecs} to process '{machinesToProcess.Count}' machines.";
 
             this.IsEnable = true;
         }

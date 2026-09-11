@@ -39,6 +39,15 @@ namespace SignedInUsers
             _viewmodel.Go();
         }
 
+        private void MachineListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_viewmodel != null && sender is ListBox listBox)
+            {
+                var selectedMachines = listBox.SelectedItems.Cast<string>().ToList();
+                _viewmodel.UpdateSelectedMachines(selectedMachines);
+            }
+        }
+
         private void StatusBar_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             string fileName = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Log");

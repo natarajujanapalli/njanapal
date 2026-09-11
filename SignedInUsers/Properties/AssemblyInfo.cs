@@ -7,11 +7,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SignedInUsers")]
+[assembly: AssemblyTitle("VLens")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SignedInUsers")]
+[assembly: AssemblyProduct("VLens")]
 [assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -51,5 +51,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("03.2603.0000.00000")]
-[assembly: AssemblyFileVersion("03.2603.0000.00000")]
+[assembly: AssemblyVersion("03.2609.0000.00000")]
+[assembly: AssemblyFileVersion("03.2609.0000.00000")]
